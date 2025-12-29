@@ -3,14 +3,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useGameStore } from "@/lib/store";
-import { AnimatePresence, motion, useDragControls } from "framer-motion";
+import { getSuspects, useGameStore } from "@/lib/store";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, Link as LinkIcon, Search, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
 
-// Helper to get random position for initial placement
 const getRandomPos = (index: number) => {
   const row = Math.floor(index / 3);
   const col = index % 3;
@@ -22,32 +21,42 @@ const getRandomPos = (index: number) => {
 };
 
 export default function DeductionBoard() {
-  const { clues, connections, addConnection, discoverClue } = useGameStore();
+  const { clues, characters, connections, addConnection, discoverClue } = useGameStore();
   const [_, setLocation] = useLocation();
   const [positions, setPositions] = useState<Record<string, { x: number; y: number; rotate: number }>>({});
-  const [selectedClueId, setSelectedClueId] = useState<string | null>(null);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [selectedItemType, setSelectedItemType] = useState<'clue' | 'character' | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionStartId, setConnectionStartId] = useState<string | null>(null);
+  const [connectionStartType, setConnectionStartType] = useState<'clue' | 'character' | null>(null);
   
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Filter only discovered clues
   const discoveredClues = Object.values(clues).filter(c => c.isDiscovered);
+  const suspects = getSuspects(characters);
 
-  // Initialize positions only once for new clues
   useEffect(() => {
     const newPositions = { ...positions };
     let hasChanges = false;
+    
     discoveredClues.forEach((clue, index) => {
       if (!newPositions[clue.id]) {
         newPositions[clue.id] = getRandomPos(index);
         hasChanges = true;
       }
     });
+
+    suspects.forEach((suspect, index) => {
+      if (!newPositions[suspect.id]) {
+        newPositions[suspect.id] = getRandomPos(discoveredClues.length + index);
+        hasChanges = true;
+      }
+    });
+
     if (hasChanges) {
       setPositions(newPositions);
     }
-  }, [discoveredClues.length]);
+  }, [discoveredClues.length, suspects.length]);
 
   const handleDragEnd = (id: string, info: any) => {
     setPositions(prev => ({
@@ -60,27 +69,30 @@ export default function DeductionBoard() {
     }));
   };
 
-  const handleClueClick = (id: string) => {
+  const handleItemClick = (id: string, type: 'clue' | 'character') => {
     if (isConnecting) {
       if (connectionStartId === null) {
         setConnectionStartId(id);
-        toast.info("Sélectionnez un deuxième indice pour créer un lien.");
-      } else if (connectionStartId === id) {
+        setConnectionStartType(type);
+        toast.info("Sélectionnez un deuxième élément pour créer un lien.");
+      } else if (connectionStartId === id && connectionStartType === type) {
         setConnectionStartId(null);
+        setConnectionStartType(null);
         toast.info("Sélection annulée.");
       } else {
-        // Attempt connection
-        const success = addConnection(connectionStartId, id);
+        const success = addConnection(connectionStartId, id, connectionStartType!, type);
         if (success) {
           toast.success("CONNEXION ÉTABLIE ! Une contradiction a été trouvée.");
         } else {
-          toast.error("Ces indices ne semblent pas liés...");
+          toast.error("Lien créé. Continuez votre analyse...");
         }
         setConnectionStartId(null);
+        setConnectionStartType(null);
         setIsConnecting(false);
       }
     } else {
-      setSelectedClueId(id);
+      setSelectedItemId(id);
+      setSelectedItemType(type);
     }
   };
 
@@ -100,7 +112,7 @@ export default function DeductionBoard() {
           
           <div className="flex items-center gap-4">
             <div className="text-sm text-[#666] font-mono hidden md:block">
-              {discoveredClues.length} INDICES / {connections.length} LIENS
+              {discoveredClues.length} INDICES / {suspects.length} SUSPECTS / {connections.length} LIENS
             </div>
             <Button 
               variant={isConnecting ? "default" : "outline"}
@@ -112,10 +124,11 @@ export default function DeductionBoard() {
               onClick={() => {
                 setIsConnecting(!isConnecting);
                 setConnectionStartId(null);
+                setConnectionStartType(null);
               }}
             >
               <LinkIcon className="mr-2 h-4 w-4" />
-              {isConnecting ? 'MODE LIAISON ACTIF' : 'RELIER DES INDICES'}
+              {isConnecting ? 'MODE LIAISON ACTIF' : 'RELIER ÉLÉMENTS'}
             </Button>
           </div>
         </div>
@@ -134,7 +147,6 @@ export default function DeductionBoard() {
               const pos2 = positions[conn.clueId2];
               if (!pos1 || !pos2) return null;
               
-              // Center of the cards (approx 200x120 card)
               const p1 = { x: pos1.x + 100, y: pos1.y + 60 };
               const p2 = { x: pos2.x + 100, y: pos2.y + 60 };
 
@@ -143,21 +155,18 @@ export default function DeductionBoard() {
                   <line 
                     x1={p1.x} y1={p1.y} 
                     x2={p2.x} y2={p2.y} 
-                    stroke="#d32f2f" 
+                    stroke={conn.isCorrect ? "#fbc02d" : "#d32f2f"} 
                     strokeWidth="3" 
                     strokeDasharray={conn.isCorrect ? "0" : "5,5"}
                     className="opacity-80"
                   />
-                  <circle cx={p1.x} cy={p1.y} r="4" fill="#d32f2f" />
-                  <circle cx={p2.x} cy={p2.y} r="4" fill="#d32f2f" />
+                  <circle cx={p1.x} cy={p1.y} r="4" fill={conn.isCorrect ? "#fbc02d" : "#d32f2f"} />
+                  <circle cx={p2.x} cy={p2.y} r="4" fill={conn.isCorrect ? "#fbc02d" : "#d32f2f"} />
                 </g>
               );
             })}
             
-            {/* Temporary line while connecting */}
             {isConnecting && connectionStartId && positions[connectionStartId] && (
-              // This would require tracking mouse position, skipping for simplicity in this version
-              // Could add a simple indicator on the start node
               <circle 
                 cx={positions[connectionStartId].x + 100} 
                 cy={positions[connectionStartId].y + 60} 
@@ -174,7 +183,7 @@ export default function DeductionBoard() {
           <div className="absolute inset-0 z-10">
             {discoveredClues.map((clue) => {
               const pos = positions[clue.id] || { x: 0, y: 0, rotate: 0 };
-              const isSelected = connectionStartId === clue.id;
+              const isSelected = connectionStartId === clue.id && connectionStartType === 'clue';
               
               return (
                 <motion.div
@@ -194,7 +203,7 @@ export default function DeductionBoard() {
                     absolute w-[200px] cursor-grab active:cursor-grabbing
                     ${isConnecting ? 'cursor-crosshair' : ''}
                   `}
-                  onClick={() => handleClueClick(clue.id)}
+                  onClick={() => handleItemClick(clue.id, 'clue')}
                 >
                   <Card className={`
                     bg-[#f5f5f5] text-black shadow-xl border-0 overflow-hidden
@@ -210,8 +219,55 @@ export default function DeductionBoard() {
                         {clue.description}
                       </p>
                     </div>
-                    {/* Pin effect */}
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-800 shadow-sm border border-white/20" />
+                  </Card>
+                </motion.div>
+              );
+            })}
+
+            {/* Draggable Suspects */}
+            {suspects.map((suspect) => {
+              const pos = positions[suspect.id] || { x: 0, y: 0, rotate: 0 };
+              const isSelected = connectionStartId === suspect.id && connectionStartType === 'character';
+              
+              return (
+                <motion.div
+                  key={suspect.id}
+                  drag
+                  dragMomentum={false}
+                  onDragEnd={(e, info) => handleDragEnd(suspect.id, info)}
+                  initial={pos}
+                  animate={{
+                    x: pos.x,
+                    y: pos.y,
+                    rotate: isSelected ? 0 : pos.rotate,
+                    scale: isSelected ? 1.05 : 1,
+                    zIndex: isSelected ? 50 : 1
+                  }}
+                  className={`
+                    absolute w-[200px] cursor-grab active:cursor-grabbing
+                    ${isConnecting ? 'cursor-crosshair' : ''}
+                  `}
+                  onClick={() => handleItemClick(suspect.id, 'character')}
+                >
+                  <Card className={`
+                    bg-[#f0f0f0] text-black shadow-xl border-2 border-[#d32f2f] overflow-hidden
+                    ${isSelected ? 'ring-4 ring-[#fbc02d]' : ''}
+                    transform transition-shadow duration-200
+                  `}>
+                    <div className="h-3 bg-gradient-to-r from-[#d32f2f] to-[#8b0000] w-full" />
+                    <div className="p-3">
+                      <h3 className="font-mono font-bold text-sm leading-tight mb-1 uppercase">
+                        {suspect.name}
+                      </h3>
+                      <p className="text-xs text-[#666] font-bold mb-2 border-b border-black/20 pb-1">
+                        {suspect.role}
+                      </p>
+                      <p className="text-xs text-gray-700 line-clamp-3 font-serif">
+                        {suspect.description}
+                      </p>
+                    </div>
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-[#d32f2f] shadow-sm border-2 border-white" />
                   </Card>
                 </motion.div>
               );
@@ -220,21 +276,32 @@ export default function DeductionBoard() {
         </div>
       </div>
 
-      {/* Detail Dialog (Read-only here) */}
-      <Dialog open={!!selectedClueId && !isConnecting} onOpenChange={(open) => !open && setSelectedClueId(null)}>
+      {/* Detail Dialog */}
+      <Dialog open={!!selectedItemId} onOpenChange={(open) => !open && setSelectedItemId(null)}>
         <DialogContent className="bg-[#1a1a1a] border-[#333] text-[#f0f0f0]">
-          {selectedClueId && clues[selectedClueId] && (
+          {selectedItemType === 'clue' && selectedItemId && clues[selectedItemId] && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-[#fbc02d] font-mono">{clues[selectedClueId].title}</DialogTitle>
+                <DialogTitle className="text-[#fbc02d] font-mono">{clues[selectedItemId].title}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                <p className="text-[#ccc]">{clues[selectedClueId].description}</p>
-                {clues[selectedClueId].content && (
+                <p className="text-[#ccc]">{clues[selectedItemId].description}</p>
+                {clues[selectedItemId].content && (
                    <div className="bg-[#f0f0f0] text-black p-3 font-serif text-sm">
-                     "{clues[selectedClueId].content}"
+                     "{clues[selectedItemId].content}"
                    </div>
                 )}
+              </div>
+            </>
+          )}
+          {selectedItemType === 'character' && selectedItemId && characters[selectedItemId] && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-[#d32f2f] font-mono">{characters[selectedItemId].name}</DialogTitle>
+                <DialogDescription className="text-[#fbc02d]">{characters[selectedItemId].role}</DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <p className="text-[#ccc]">{characters[selectedItemId].description}</p>
               </div>
             </>
           )}

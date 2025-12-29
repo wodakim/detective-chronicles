@@ -8,7 +8,7 @@ export interface Clue {
   description: string;
   type: ClueType;
   image?: string;
-  content?: string; // For documents or transcripts
+  content?: string;
   isDiscovered: boolean;
   locationId: string;
 }
@@ -27,14 +27,16 @@ export interface Location {
   name: string;
   description: string;
   image: string;
-  clues: string[]; // IDs of clues found here
-  characters: string[]; // IDs of characters found here
+  clues: string[];
+  characters: string[];
 }
 
 export interface Connection {
   id: string;
   clueId1: string;
   clueId2: string;
+  clueId1Type: 'clue' | 'character';
+  clueId2Type: 'clue' | 'character';
   reason: string;
   isCorrect: boolean;
 }
@@ -47,10 +49,9 @@ export interface GameState {
   connections: Connection[];
   dialogueHistory: string[];
   
-  // Actions
   setCurrentLocation: (id: string | null) => void;
   discoverClue: (id: string) => void;
-  addConnection: (clueId1: string, clueId2: string) => boolean;
+  addConnection: (id1: string, id2: string, type1: 'clue' | 'character', type2: 'clue' | 'character') => boolean;
   resetGame: () => void;
 }
 
@@ -61,7 +62,7 @@ const initialClues: Record<string, Clue> = {
     title: 'Seringue',
     description: 'Une seringue usagée trouvée au sol, à droite du fauteuil.',
     type: 'visual',
-    image: '/images/syringe.jpg', // Placeholder
+    image: '/images/syringe.jpg',
     isDiscovered: false,
     locationId: 'loc1'
   },
@@ -87,7 +88,7 @@ const initialClues: Record<string, Clue> = {
     title: 'Elias est Gaucher',
     description: 'Observation confirmée par sa sœur et des photos de concert.',
     type: 'medical',
-    isDiscovered: true, // Known from start
+    isDiscovered: true,
     locationId: 'loc3'
   },
   'c5': {
@@ -113,7 +114,7 @@ const initialLocations: Record<string, Location> = {
     id: 'loc2',
     name: 'Bureau de l\'Agent',
     description: 'Moderne, froid, impersonnel. Des disques d\'or aux murs.',
-    image: '/images/detective_desk_background.jpg', // Reusing for now
+    image: '/images/detective_desk_background.jpg',
     clues: [],
     characters: ['char1']
   },
@@ -121,7 +122,7 @@ const initialLocations: Record<string, Location> = {
     id: 'loc3',
     name: 'Appartement d\'Elias',
     description: 'Un sanctuaire de musique. Un piano à queue domine la pièce.',
-    image: '/images/detective_desk_background.jpg', // Reusing for now
+    image: '/images/detective_desk_background.jpg',
     clues: ['c4'],
     characters: ['char2']
   }
@@ -132,18 +133,30 @@ const initialCharacters: Record<string, Character> = {
     id: 'char1',
     name: 'Marcus Vane',
     role: 'Agent',
-    description: 'L\'agent d\'Elias. Il semble plus préoccupé par les pertes financières que par la mort de son client.',
-    image: '/images/case_file_cover.jpg', // Placeholder
+    description: 'Manipulateur, narcissique. Mobile: rupture de contrat. Alibi: Au bar (confirmé, mais a pu s\'éclipser).',
+    image: '/images/case_file_cover.jpg',
     isSuspect: true
   },
   'char2': {
     id: 'char2',
     name: 'Sarah Jenkins',
     role: 'Rivale',
-    description: 'Pianiste talentueuse mais restée dans l\'ombre d\'Elias.',
-    image: '/images/case_file_cover.jpg', // Placeholder
+    description: 'Jalousie professionnelle. Impulsive, colérique. Alibi: En coulisses (pas de témoins).',
+    image: '/images/case_file_cover.jpg',
+    isSuspect: true
+  },
+  'char3': {
+    id: 'char3',
+    name: 'Dr. Aris Thorne',
+    role: 'Frère',
+    description: 'Froid, calculateur, connaissances médicales. Mobile: héritage. Alibi: Chez lui (voiture vue près du club).',
+    image: '/images/case_file_cover.jpg',
     isSuspect: true
   }
+};
+
+export const getSuspects = (characters: Record<string, Character>) => {
+  return Object.values(characters).filter(c => c.isSuspect);
 };
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -163,16 +176,16 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   })),
 
-  addConnection: (clueId1, clueId2) => {
-    // Logic to check if connection is valid
-    // For this demo: Gaucher (c4) + Piqûre Bras Gauche (c5) is the winning combo
-    const isCorrect = (clueId1 === 'c4' && clueId2 === 'c5') || (clueId1 === 'c5' && clueId2 === 'c4');
+  addConnection: (id1, id2, type1, type2) => {
+    const isCorrect = (id1 === 'c4' && id2 === 'c5') || (id1 === 'c5' && id2 === 'c4');
     
     const newConnection: Connection = {
       id: Math.random().toString(36).substr(2, 9),
-      clueId1,
-      clueId2,
-      reason: isCorrect ? "Contradiction physique majeure !" : "Lien incertain...",
+      clueId1: id1,
+      clueId2: id2,
+      clueId1Type: type1,
+      clueId2Type: type2,
+      reason: isCorrect ? "Contradiction physique majeure !" : "Lien potentiel détecté...",
       isCorrect
     };
 
@@ -186,6 +199,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   resetGame: () => set({
     currentLocationId: null,
     clues: initialClues,
+    characters: initialCharacters,
     connections: [],
     dialogueHistory: []
   })
