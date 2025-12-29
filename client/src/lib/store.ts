@@ -41,6 +41,15 @@ export interface Connection {
   isCorrect: boolean;
 }
 
+export interface CaseAnalysis {
+  solved: boolean;
+  culpritId: string;
+  correctConnections: number;
+  totalConnections: number;
+  verdict: string;
+  explanation: string;
+}
+
 export interface GameState {
   currentLocationId: string | null;
   clues: Record<string, Clue>;
@@ -48,15 +57,16 @@ export interface GameState {
   locations: Record<string, Location>;
   connections: Connection[];
   dialogueHistory: string[];
+  caseAnalysis: CaseAnalysis | null;
   
   setCurrentLocation: (id: string | null) => void;
   discoverClue: (id: string) => void;
   addConnection: (id1: string, id2: string, type1: 'clue' | 'character', type2: 'clue' | 'character') => boolean;
   clearConnections: () => void;
+  analyzeCase: () => CaseAnalysis;
   resetGame: () => void;
 }
 
-// Initial Data for "L'Écho Silencieux"
 const initialClues: Record<string, Clue> = {
   'c1': {
     id: 'c1',
@@ -160,13 +170,14 @@ export const getSuspects = (characters: Record<string, Character>) => {
   return Object.values(characters).filter(c => c.isSuspect);
 };
 
-export const useGameStore = create<GameState>((set) => ({
+export const useGameStore = create<GameState>((set, get) => ({
   currentLocationId: null,
   clues: initialClues,
   characters: initialCharacters,
   locations: initialLocations,
   connections: [],
   dialogueHistory: [],
+  caseAnalysis: null,
 
   setCurrentLocation: (id) => set({ currentLocationId: id }),
   
@@ -199,11 +210,54 @@ export const useGameStore = create<GameState>((set) => ({
 
   clearConnections: () => set({ connections: [] }),
 
+  analyzeCase: () => {
+    const state = get();
+    const { connections } = state;
+
+    const correctConnection = connections.find(
+      conn => (conn.clueId1 === 'c4' && conn.clueId2 === 'c5') || (conn.clueId1 === 'c5' && conn.clueId2 === 'c4')
+    );
+
+    const correctConnCount = connections.filter(c => c.isCorrect).length;
+    const totalConnCount = connections.length;
+
+    let solved = false;
+    let verdict = "";
+    let explanation = "";
+
+    if (correctConnection && correctConnCount >= 1) {
+      solved = true;
+      verdict = "AFFAIRE RÉSOLUE : Marcus Vane est le coupable.";
+      explanation = "Vous avez correctement identifié la contradiction physique majeure : Elias est gaucher, mais la piqûre d'injection se trouve sur son bras gauche. Un gaucher ne pourrait pas s'injecter précisément de ce côté. Cela prouve que quelqu'un d'autre a administré la drogue. Marcus Vane, l'agent, avait le mobile (rupture de contrat imminente) et l'opportunité (accès à la loge). Il a maquillé le meurtre en suicide pour toucher l'assurance vie avant la rupture du contrat.";
+    } else if (totalConnCount > 0) {
+      solved = false;
+      verdict = "ENQUÊTE INCOMPLÈTE";
+      explanation = "Vous avez créé " + totalConnCount + " connexion(s), mais vous n'avez pas identifié la contradiction clé. Cherchez une incohérence physique ou psychologique majeure qui invalide la thèse du suicide. Indice : Examinez les détails médicaux et comportementaux d'Elias.";
+    } else {
+      solved = false;
+      verdict = "ENQUÊTE NON COMMENCÉE";
+      explanation = "Vous n'avez créé aucune connexion. Commencez par relier les indices entre eux pour former des hypothèses.";
+    }
+
+    const analysis: CaseAnalysis = {
+      solved,
+      culpritId: solved ? 'char1' : '',
+      correctConnections: correctConnCount,
+      totalConnections: totalConnCount,
+      verdict,
+      explanation
+    };
+
+    set({ caseAnalysis: analysis });
+    return analysis;
+  },
+
   resetGame: () => set({
     currentLocationId: null,
     clues: initialClues,
     characters: initialCharacters,
     connections: [],
-    dialogueHistory: []
+    dialogueHistory: [],
+    caseAnalysis: null
   })
 }));

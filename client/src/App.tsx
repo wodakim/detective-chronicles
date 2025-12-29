@@ -4,6 +4,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import CaseConclusion from "./pages/CaseConclusion";
 import DeductionBoard from "./pages/DeductionBoard";
 import Game from "./pages/Game";
 
@@ -12,6 +13,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Game} />
       <Route path="/deduction" component={DeductionBoard} />
+      <Route path="/conclusion" component={CaseConclusion} />
       <Route component={NotFound} />
     </Switch>
   );

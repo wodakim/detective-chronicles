@@ -115,17 +115,25 @@ export default function DeductionBoard() {
               {discoveredClues.length} INDICES / {suspects.length} SUSPECTS / {connections.length} LIENS
             </div>
             {connections.length > 0 && (
-              <Button
-                variant="outline"
-                className="border-[#d32f2f] text-[#d32f2f] hover:bg-[#d32f2f]/10"
-                onClick={() => {
-                  clearConnections();
-                  toast.info("Tableau réinitialisé. Recommencez votre analyse.");
-                }}
-              >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                Réinitialiser
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="border-[#d32f2f] text-[#d32f2f] hover:bg-[#d32f2f]/10"
+                  onClick={() => {
+                    clearConnections();
+                    toast.info("Tableau réinitialisé. Recommencez votre analyse.");
+                  }}
+                >
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Réinitialiser
+                </Button>
+                <Button
+                  className="bg-[#fbc02d] text-black hover:bg-[#f9a825]"
+                  onClick={() => setLocation('/conclusion')}
+                >
+                  Conclure l'Enquête
+                </Button>
+              </div>
             )}
             <Button 
               variant={isConnecting ? "default" : "outline"}
