@@ -24,7 +24,7 @@ export default function Settings() {
       toast.success(t('settings.game_loaded'));
       setLocation('/');
     } else {
-      toast.error('Erreur lors du chargement');
+      toast.error(t('settings.load_error'));
     }
   };
 
@@ -106,7 +106,7 @@ export default function Settings() {
                             <p className="text-[#888] text-sm font-mono">{t('settings.save_slot')} {slot}</p>
                             {save ? (
                               <p className="text-[#f0f0f0] text-sm mt-1">
-                                {t('settings.save_time')}: {new Date(save.timestamp).toLocaleDateString('fr-FR')}
+                                {t('settings.save_time')}: {new Date(save.timestamp).toLocaleDateString(language === 'fr' ? 'fr-FR' : language === 'pl' ? 'pl-PL' : 'en-US')}
                               </p>
                             ) : (
                               <p className="text-[#666] text-sm mt-1">{t('settings.no_saves')}</p>
@@ -118,7 +118,7 @@ export default function Settings() {
                               onClick={() => handleSaveGame(slot)}
                             >
                               <Download className="mr-2 h-4 w-4" />
-                              Sauvegarder
+                              {t('settings.save_game')}
                             </Button>
                             {save && (
                               <>
@@ -127,7 +127,7 @@ export default function Settings() {
                                   onClick={() => handleLoadGame(slot)}
                                 >
                                   <Upload className="mr-2 h-4 w-4" />
-                                  Charger
+                                  {t('settings.load_game')}
                                 </Button>
                                 <Button
                                   className="flex-1 bg-[#d32f2f] text-white hover:bg-[#c62828]"

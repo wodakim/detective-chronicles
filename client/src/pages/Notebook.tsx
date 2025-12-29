@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useGameStore } from "@/lib/store";
+import { useTranslation } from "@/lib/translations";
 import { motion } from "framer-motion";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -11,7 +12,8 @@ import { toast } from "sonner";
 import { useLocation } from "wouter";
 
 export default function Notebook() {
-  const { notes, addNote, updateNote, deleteNote, clues } = useGameStore();
+  const { notes, addNote, updateNote, deleteNote, clues, language } = useGameStore();
+  const t = useTranslation(language);
   const [_, setLocation] = useLocation();
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -22,23 +24,23 @@ export default function Notebook() {
 
   const handleCreateNote = () => {
     if (!formData.title.trim()) {
-      toast.error("Le titre ne peut pas être vide");
+      toast.error(t('notebook.title_empty'));
       return;
     }
     addNote(formData.title, formData.content);
     setFormData({ title: '', content: '' });
     setIsCreating(false);
-    toast.success("Note créée");
+    toast.success(t('notebook.note_created'));
   };
 
   const handleUpdateNote = () => {
     if (!selectedNote) return;
     if (!formData.title.trim()) {
-      toast.error("Le titre ne peut pas être vide");
+      toast.error(t('notebook.title_empty'));
       return;
     }
     updateNote(selectedNote.id, formData.title, formData.content);
-    toast.success("Note mise à jour");
+    toast.success(t('notebook.note_updated'));
   };
 
   const handleDeleteNote = (id: string) => {
@@ -47,7 +49,7 @@ export default function Notebook() {
       setSelectedNoteId(null);
       setFormData({ title: '', content: '' });
     }
-    toast.success("Note supprimée");
+    toast.success(t('notebook.note_deleted'));
   };
 
   const handleSelectNote = (id: string) => {
@@ -76,8 +78,8 @@ export default function Notebook() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-mono font-bold text-[#f0f0f0]">CARNET DE NOTES</h1>
-              <p className="text-[#888] font-mono mt-2">Organisez vos pensées et annotations</p>
+              <h1 className="text-4xl font-mono font-bold text-[#f0f0f0]">{t('notebook.title')}</h1>
+              <p className="text-[#888] font-mono mt-2">{t('notebook.subtitle')}</p>
             </div>
             <Button
               variant="ghost"
@@ -85,7 +87,7 @@ export default function Notebook() {
               className="text-[#888] hover:text-white"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour
+              {t('game.back')}
             </Button>
           </div>
 
@@ -97,14 +99,14 @@ export default function Notebook() {
                 onClick={handleNewNote}
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Nouvelle Note
+                {t('notebook.new_note')}
               </Button>
 
               <div className="space-y-2 max-h-[600px] overflow-y-auto">
                 {notesList.length === 0 ? (
                   <Card className="bg-[#0a0a0a] border-[#333]">
                     <CardContent className="pt-6">
-                      <p className="text-[#888] text-center text-sm">Aucune note pour le moment</p>
+                      <p className="text-[#888] text-center text-sm">{t('notebook.no_notes')}</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -124,7 +126,7 @@ export default function Notebook() {
                         <CardContent className="pt-4">
                           <p className="text-[#f0f0f0] font-mono text-sm truncate">{note.title}</p>
                           <p className="text-[#888] text-xs mt-1">
-                            {new Date(note.updatedAt).toLocaleDateString('fr-FR')}
+                            {new Date(note.updatedAt).toLocaleDateString(language === 'fr' ? 'fr-FR' : language === 'pl' ? 'pl-PL' : 'en-US')}
                           </p>
                         </CardContent>
                       </Card>
@@ -140,26 +142,26 @@ export default function Notebook() {
                 <Card className="bg-[#0a0a0a] border-[#fbc02d]/50">
                   <CardHeader>
                     <CardTitle className="text-[#f0f0f0]">
-                      {isCreating ? 'Nouvelle Note' : 'Éditer la Note'}
+                      {isCreating ? t('notebook.new_note') : t('notebook.edit_note')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <label className="text-[#888] text-sm font-mono mb-2 block">TITRE</label>
+                      <label className="text-[#888] text-sm font-mono mb-2 block">{t('notebook.title_label')}</label>
                       <Input
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        placeholder="Titre de la note..."
+                        placeholder={t('notebook.title_placeholder')}
                         className="bg-[#1a1a1a] border-[#333] text-[#f0f0f0] placeholder-[#666]"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[#888] text-sm font-mono mb-2 block">CONTENU</label>
+                      <label className="text-[#888] text-sm font-mono mb-2 block">{t('notebook.content_label')}</label>
                       <Textarea
                         value={formData.content}
                         onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                        placeholder="Écrivez vos observations, hypothèses et annotations..."
+                        placeholder={t('notebook.content_placeholder')}
                         className="bg-[#1a1a1a] border-[#333] text-[#f0f0f0] placeholder-[#666] min-h-[300px] resize-none"
                       />
                     </div>
@@ -171,7 +173,7 @@ export default function Notebook() {
                             className="flex-1 bg-[#fbc02d] text-black hover:bg-[#f9a825]"
                             onClick={handleCreateNote}
                           >
-                            Créer
+                            {t('notebook.create')}
                           </Button>
                           <Button
                             variant="outline"
@@ -181,7 +183,7 @@ export default function Notebook() {
                               setFormData({ title: '', content: '' });
                             }}
                           >
-                            Annuler
+                            {t('notebook.cancel')}
                           </Button>
                         </>
                       ) : (
@@ -190,7 +192,7 @@ export default function Notebook() {
                             className="flex-1 bg-[#fbc02d] text-black hover:bg-[#f9a825]"
                             onClick={handleUpdateNote}
                           >
-                            Mettre à jour
+                            {t('notebook.update')}
                           </Button>
                           <Button
                             variant="outline"
@@ -202,7 +204,7 @@ export default function Notebook() {
                             }}
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
-                            Supprimer
+                            {t('notebook.delete')}
                           </Button>
                         </>
                       )}
@@ -212,7 +214,7 @@ export default function Notebook() {
               ) : (
                 <Card className="bg-[#0a0a0a] border-[#333] h-full flex items-center justify-center min-h-[400px]">
                   <CardContent className="text-center">
-                    <p className="text-[#888] font-mono">Sélectionnez une note ou créez-en une nouvelle</p>
+                    <p className="text-[#888] font-mono">{t('notebook.select_or_create')}</p>
                   </CardContent>
                 </Card>
               )}

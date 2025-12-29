@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle as DialogTitleComponent } from "@/components/ui/dialog";
 import { getDialoguesForCharacter, useGameStore } from "@/lib/store";
+import { useTranslation } from "@/lib/translations";
 import { motion } from "framer-motion";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { useState } from "react";
@@ -16,7 +17,8 @@ interface DialogueState {
 }
 
 export default function Interrogation() {
-  const { characters, discoverClue } = useGameStore();
+  const { characters, discoverClue, language } = useGameStore();
+  const t = useTranslation(language);
   const [_, setLocation] = useLocation();
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
   const [dialogueState, setDialogueState] = useState<DialogueState>({
@@ -57,11 +59,11 @@ export default function Interrogation() {
 
     if (selectedOptionData.revealClue) {
       discoverClue(selectedOptionData.revealClue);
-      toast.success("Nouvel indice découvert !");
+      toast.success(t('interrogation.new_clue'));
     }
 
     if (selectedOptionData.suspicionIncrease && selectedOptionData.suspicionIncrease > 0) {
-      toast.info(`Suspicion augmentée de +${selectedOptionData.suspicionIncrease}`);
+      toast.info(t('interrogation.suspicion_increase', { count: selectedOptionData.suspicionIncrease }));
     }
 
     setShowResponse(true);
@@ -84,7 +86,7 @@ export default function Interrogation() {
     } else {
       setDialogueState({ currentNodeId: null, selectedOption: null, history: [] });
       setShowResponse(false);
-      toast.info("Interrogatoire terminé.");
+      toast.info(t('interrogation.finished'));
     }
   };
 
@@ -99,8 +101,8 @@ export default function Interrogation() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-mono font-bold text-[#f0f0f0]">INTERROGATOIRES</h1>
-              <p className="text-[#888] font-mono mt-2">Testez les alibis des suspects</p>
+              <h1 className="text-4xl font-mono font-bold text-[#f0f0f0]">{t('interrogation.title')}</h1>
+              <p className="text-[#888] font-mono mt-2">{t('interrogation.subtitle')}</p>
             </div>
             <Button
               variant="ghost"
@@ -108,7 +110,7 @@ export default function Interrogation() {
               className="text-[#888] hover:text-white"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour
+              {t('game.back')}
             </Button>
           </div>
 
@@ -128,17 +130,17 @@ export default function Interrogation() {
                   >
                     <div className="h-2 bg-gradient-to-r from-[#d32f2f] to-[#8b0000]" />
                     <CardHeader>
-                      <CardTitle className="text-[#f0f0f0] text-xl">{suspect.name}</CardTitle>
-                      <p className="text-[#fbc02d] text-sm font-mono">{suspect.role}</p>
+                      <CardTitle className="text-[#f0f0f0] text-xl">{t(suspect.name)}</CardTitle>
+                      <p className="text-[#fbc02d] text-sm font-mono">{t(suspect.role)}</p>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#ccc] text-sm mb-4">{suspect.description}</p>
+                      <p className="text-[#ccc] text-sm mb-4">{t(suspect.description)}</p>
                       <Button
                         className="w-full bg-[#333] hover:bg-[#444] text-white"
                         onClick={() => handleSelectCharacter(suspect.id)}
                       >
                         <MessageCircle className="mr-2 h-4 w-4" />
-                        Interroger
+                        {t('interrogation.interrogate')}
                       </Button>
                     </CardContent>
                   </Card>
@@ -152,15 +154,15 @@ export default function Interrogation() {
                 <div className="h-1 bg-[#d32f2f]" />
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-[#f0f0f0]">{selectedCharacter?.name}</CardTitle>
-                    <p className="text-[#888] text-sm font-mono mt-1">{selectedCharacter?.role}</p>
+                    <CardTitle className="text-[#f0f0f0]">{selectedCharacter ? t(selectedCharacter.name) : ''}</CardTitle>
+                    <p className="text-[#888] text-sm font-mono mt-1">{selectedCharacter ? t(selectedCharacter.role) : ''}</p>
                   </div>
                   <Button
                     variant="outline"
                     onClick={() => handleSelectCharacter('')}
                     className="border-[#444] text-[#ccc] hover:bg-[#333]"
                   >
-                    Changer de suspect
+                    {t('interrogation.change_suspect')}
                   </Button>
                 </CardHeader>
               </Card>
@@ -178,12 +180,12 @@ export default function Interrogation() {
                         onClick={() => handleStartDialogue(dialogue.id)}
                       >
                         <CardContent className="pt-6">
-                          <p className="text-[#f0f0f0] font-mono mb-4">{dialogue.question}</p>
+                          <p className="text-[#f0f0f0] font-mono mb-4">{t(dialogue.question)}</p>
                           <Button
                             className="w-full bg-[#fbc02d] text-black hover:bg-[#f9a825]"
                             onClick={() => handleStartDialogue(dialogue.id)}
                           >
-                            Poser cette question
+                            {t('interrogation.ask_question')}
                           </Button>
                         </CardContent>
                       </Card>
@@ -195,8 +197,8 @@ export default function Interrogation() {
                 <div className="space-y-6">
                   <Card className="bg-[#0a0a0a] border-[#fbc02d]/50">
                     <CardContent className="pt-6">
-                      <p className="text-[#fbc02d] font-mono text-sm mb-2">QUESTION</p>
-                      <p className="text-[#f0f0f0] text-lg font-serif">{currentDialogue.question}</p>
+                      <p className="text-[#fbc02d] font-mono text-sm mb-2">{t('interrogation.question')}</p>
+                      <p className="text-[#f0f0f0] text-lg font-serif">{t(currentDialogue.question)}</p>
                     </CardContent>
                   </Card>
 
@@ -214,7 +216,7 @@ export default function Interrogation() {
                             onClick={() => handleSelectOption(option.id)}
                           >
                             <CardContent className="pt-6">
-                              <p className="text-[#ccc] font-serif">{option.text}</p>
+                              <p className="text-[#ccc] font-serif">{t(option.text)}</p>
                             </CardContent>
                           </Card>
                         </motion.div>
@@ -224,12 +226,12 @@ export default function Interrogation() {
                     /* Response Display */
                     <Card className="bg-[#0a0a0a] border-[#d32f2f]/50">
                       <CardContent className="pt-6">
-                        <p className="text-[#d32f2f] font-mono text-sm mb-2">RÉPONSE</p>
-                        <p className="text-[#f0f0f0] text-lg font-serif mb-4">{selectedOptionData?.response}</p>
+                        <p className="text-[#d32f2f] font-mono text-sm mb-2">{t('interrogation.response')}</p>
+                        <p className="text-[#f0f0f0] text-lg font-serif mb-4">{t(selectedOptionData?.response || '')}</p>
                         {selectedOptionData?.suspicionIncrease && (
                           <div className="bg-[#d32f2f]/10 border border-[#d32f2f]/50 p-3 rounded mb-4">
                             <p className="text-[#d32f2f] text-sm font-mono">
-                              Suspicion +{selectedOptionData.suspicionIncrease}
+                              {t('interrogation.suspicion_increase', { count: selectedOptionData.suspicionIncrease })}
                             </p>
                           </div>
                         )}
@@ -245,7 +247,7 @@ export default function Interrogation() {
                         onClick={handleConfirmOption}
                         disabled={!dialogueState.selectedOption}
                       >
-                        Confirmer le choix
+                        {t('interrogation.confirm')}
                       </Button>
                     ) : (
                       <>
@@ -253,14 +255,14 @@ export default function Interrogation() {
                           className="flex-1 bg-[#fbc02d] text-black hover:bg-[#f9a825]"
                           onClick={handleContinue}
                         >
-                          Continuer
+                          {t('interrogation.continue')}
                         </Button>
                         <Button
                           variant="outline"
                           className="flex-1 border-[#444] text-[#ccc] hover:bg-[#333]"
                           onClick={() => setDialogueState({ currentNodeId: null, selectedOption: null, history: [] })}
                         >
-                          Autres questions
+                          {t('interrogation.other_questions')}
                         </Button>
                       </>
                     )}

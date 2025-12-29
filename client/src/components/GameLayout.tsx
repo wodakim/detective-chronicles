@@ -1,4 +1,5 @@
 import { useGameStore } from "@/lib/store";
+import { useTranslation } from "@/lib/translations";
 import { FolderOpen, Map, MessageCircle, Notebook, Search, Settings } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
@@ -12,7 +13,8 @@ interface GameLayoutProps {
 }
 
 export function GameLayout({ children }: GameLayoutProps) {
-  const { currentLocationId, setCurrentLocation, locations } = useGameStore();
+  const { currentLocationId, setCurrentLocation, locations, language } = useGameStore();
+  const t = useTranslation(language);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [_, setLocation] = useLocation();
 
@@ -44,17 +46,20 @@ export function GameLayout({ children }: GameLayoutProps) {
               <>
                 {/* Navigation Rapide */}
                 <div>
-                  <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">Lieux</h2>
+                  <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">{t('deduction.clues')}</h2>
                   <div className="space-y-2">
                     {Object.values(locations).map((loc) => (
                       <Button
                         key={loc.id}
                         variant={currentLocationId === loc.id ? "secondary" : "ghost"}
                         className={`w-full justify-start ${currentLocationId === loc.id ? 'bg-[#fbc02d] text-black hover:bg-[#f9a825]' : 'text-[#ccc] hover:text-white hover:bg-[#333]'}`}
-                        onClick={() => setCurrentLocation(loc.id)}
+                        onClick={() => {
+                          setCurrentLocation(loc.id);
+                          setLocation('/');
+                        }}
                       >
                         <Map className="mr-2 h-4 w-4" />
-                        {loc.name}
+                        {t(loc.name)}
                       </Button>
                     ))}
                   </div>
@@ -72,7 +77,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       onClick={() => setLocation('/interrogation')}
                     >
                       <MessageCircle className="mr-2 h-4 w-4" />
-                      Interrogatoires
+                      {t('nav.interrogations')}
                     </Button>
                     <Button 
                       variant="outline" 
@@ -80,7 +85,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       onClick={() => setLocation('/notebook')}
                     >
                       <Notebook className="mr-2 h-4 w-4" />
-                      Carnet de Notes
+                      {t('nav.notebook')}
                     </Button>
                     <Button 
                       variant="outline" 
@@ -88,7 +93,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       onClick={() => setLocation('/deduction')}
                     >
                       <Search className="mr-2 h-4 w-4" />
-                      Tableau de Déduction
+                      {t('nav.deduction')}
                     </Button>
                     <Button 
                       variant="outline" 
@@ -96,7 +101,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       onClick={() => setLocation('/settings')}
                     >
                       <Settings className="mr-2 h-4 w-4" />
-                      Paramètres
+                      {t('nav.settings')}
                     </Button>
                   </div>
                 </div>
@@ -107,7 +112,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                   <TooltipTrigger asChild>
                     <Button variant="ghost" size="icon"><Map className="h-5 w-5" /></Button>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Lieux</TooltipContent>
+                  <TooltipContent side="right">{t('deduction.clues')}</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -115,7 +120,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       <MessageCircle className="h-5 w-5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Interrogatoires</TooltipContent>
+                  <TooltipContent side="right">{t('nav.interrogations')}</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -123,7 +128,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       <Notebook className="h-5 w-5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Carnet</TooltipContent>
+                  <TooltipContent side="right">{t('nav.notebook')}</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -131,7 +136,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       <Search className="h-5 w-5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Déduction</TooltipContent>
+                  <TooltipContent side="right">{t('nav.deduction')}</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -139,7 +144,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                       <Settings className="h-5 w-5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Paramètres</TooltipContent>
+                  <TooltipContent side="right">{t('nav.settings')}</TooltipContent>
                 </Tooltip>
               </div>
             )}
@@ -162,9 +167,9 @@ export function GameLayout({ children }: GameLayoutProps) {
         {/* Top Bar (Optional, for breadcrumbs or status) */}
         <header className="h-14 border-b border-[#333] bg-[#1a1a1a]/90 backdrop-blur flex items-center px-6 justify-between z-10">
            <div className="flex items-center space-x-2 text-sm text-[#888]">
-             <span>ENQUÊTE EN COURS</span>
+             <span>{t('conclusion.status_in_progress')}</span>
              <span>/</span>
-             <span className="text-[#f0f0f0] font-medium">L'ÉCHO SILENCIEUX</span>
+             <span className="text-[#f0f0f0] font-medium">{t('game.title')}</span>
            </div>
            <div className="flex items-center space-x-4">
              {/* Accessibility Controls could go here */}

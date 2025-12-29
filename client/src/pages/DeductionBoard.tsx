@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getSuspects, useGameStore } from "@/lib/store";
+import { useTranslation } from "@/lib/translations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, Link as LinkIcon, RotateCcw, Search, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -21,7 +22,8 @@ const getRandomPos = (index: number) => {
 };
 
 export default function DeductionBoard() {
-  const { clues, characters, connections, addConnection, discoverClue, clearConnections } = useGameStore();
+  const { clues, characters, connections, addConnection, discoverClue, clearConnections, language } = useGameStore();
+  const t = useTranslation(language);
   const [_, setLocation] = useLocation();
   const [positions, setPositions] = useState<Record<string, { x: number; y: number; rotate: number }>>({});
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -74,17 +76,17 @@ export default function DeductionBoard() {
       if (connectionStartId === null) {
         setConnectionStartId(id);
         setConnectionStartType(type);
-        toast.info("Sélectionnez un deuxième élément pour créer un lien.");
+        toast.info(t('deduction.select_second'));
       } else if (connectionStartId === id && connectionStartType === type) {
         setConnectionStartId(null);
         setConnectionStartType(null);
-        toast.info("Sélection annulée.");
+        toast.info(t('deduction.selection_cancelled'));
       } else {
         const success = addConnection(connectionStartId, id, connectionStartType!, type);
         if (success) {
-          toast.success("CONNEXION ÉTABLIE ! Une contradiction a été trouvée.");
+          toast.success(t('deduction.relevant_connection'));
         } else {
-          toast.error("Lien créé. Continuez votre analyse...");
+          toast.error(t('deduction.potential_connection'));
         }
         setConnectionStartId(null);
         setConnectionStartType(null);
@@ -104,15 +106,15 @@ export default function DeductionBoard() {
           <div className="flex items-center gap-4">
             <Button variant="ghost" onClick={() => setLocation('/')} className="text-[#888] hover:text-white">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour à l'enquête
+              {t('game.back')}
             </Button>
             <div className="h-6 w-px bg-[#333]" />
-            <h1 className="font-mono font-bold text-[#f0f0f0]">TABLEAU DE DÉDUCTION</h1>
+            <h1 className="font-mono font-bold text-[#f0f0f0]">{t('deduction.title')}</h1>
           </div>
           
           <div className="flex items-center gap-4">
             <div className="text-sm text-[#666] font-mono hidden md:block">
-              {discoveredClues.length} INDICES / {suspects.length} SUSPECTS / {connections.length} LIENS
+              {discoveredClues.length} {t('deduction.clues')} / {suspects.length} {t('deduction.suspects')} / {connections.length} {t('deduction.connections')}
             </div>
             {connections.length > 0 && (
               <div className="flex gap-2">
@@ -121,17 +123,17 @@ export default function DeductionBoard() {
                   className="border-[#d32f2f] text-[#d32f2f] hover:bg-[#d32f2f]/10"
                   onClick={() => {
                     clearConnections();
-                    toast.info("Tableau réinitialisé. Recommencez votre analyse.");
+                    toast.info(t('deduction.reset_message'));
                   }}
                 >
                   <RotateCcw className="mr-2 h-4 w-4" />
-                  Réinitialiser
+                  {t('deduction.reset')}
                 </Button>
                 <Button
                   className="bg-[#fbc02d] text-black hover:bg-[#f9a825]"
                   onClick={() => setLocation('/conclusion')}
                 >
-                  Conclure l'Enquête
+                  {t('deduction.conclude')}
                 </Button>
               </div>
             )}
@@ -149,7 +151,7 @@ export default function DeductionBoard() {
               }}
             >
               <LinkIcon className="mr-2 h-4 w-4" />
-              {isConnecting ? 'MODE LIAISON ACTIF' : 'RELIER ÉLÉMENTS'}
+              {isConnecting ? t('deduction.mode_link_active') : t('deduction.mode_link')}
             </Button>
           </div>
         </div>
@@ -234,10 +236,10 @@ export default function DeductionBoard() {
                     <div className="h-2 bg-[#d32f2f] w-full" />
                     <div className="p-3">
                       <h3 className="font-mono font-bold text-sm leading-tight mb-2 uppercase border-b border-black/10 pb-1">
-                        {clue.title}
+                        {t(clue.title)}
                       </h3>
                       <p className="text-xs text-gray-700 line-clamp-3 font-serif">
-                        {clue.description}
+                        {t(clue.description)}
                       </p>
                     </div>
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-800 shadow-sm border border-white/20" />
@@ -279,16 +281,15 @@ export default function DeductionBoard() {
                     <div className="h-3 bg-gradient-to-r from-[#d32f2f] to-[#8b0000] w-full" />
                     <div className="p-3">
                       <h3 className="font-mono font-bold text-sm leading-tight mb-1 uppercase">
-                        {suspect.name}
+                        {t(suspect.name)}
                       </h3>
-                      <p className="text-xs text-[#666] font-bold mb-2 border-b border-black/20 pb-1">
-                        {suspect.role}
+                      <p className="text-[10px] text-[#d32f2f] font-bold mb-2 uppercase tracking-tighter">
+                        {t(suspect.role)}
                       </p>
-                      <p className="text-xs text-gray-700 line-clamp-3 font-serif">
-                        {suspect.description}
-                      </p>
+                      <div className="aspect-square bg-gray-300 mb-2 overflow-hidden grayscale">
+                        <img src={suspect.image} alt={t(suspect.name)} className="w-full h-full object-cover" />
+                      </div>
                     </div>
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-[#d32f2f] shadow-sm border-2 border-white" />
                   </Card>
                 </motion.div>
               );
@@ -296,38 +297,6 @@ export default function DeductionBoard() {
           </div>
         </div>
       </div>
-
-      {/* Detail Dialog */}
-      <Dialog open={!!selectedItemId} onOpenChange={(open) => !open && setSelectedItemId(null)}>
-        <DialogContent className="bg-[#1a1a1a] border-[#333] text-[#f0f0f0]">
-          {selectedItemType === 'clue' && selectedItemId && clues[selectedItemId] && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-[#fbc02d] font-mono">{clues[selectedItemId].title}</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <p className="text-[#ccc]">{clues[selectedItemId].description}</p>
-                {clues[selectedItemId].content && (
-                   <div className="bg-[#f0f0f0] text-black p-3 font-serif text-sm">
-                     "{clues[selectedItemId].content}"
-                   </div>
-                )}
-              </div>
-            </>
-          )}
-          {selectedItemType === 'character' && selectedItemId && characters[selectedItemId] && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-[#d32f2f] font-mono">{characters[selectedItemId].name}</DialogTitle>
-                <DialogDescription className="text-[#fbc02d]">{characters[selectedItemId].role}</DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <p className="text-[#ccc]">{characters[selectedItemId].description}</p>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </GameLayout>
   );
 }

@@ -3,13 +3,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGameStore } from "@/lib/store";
+import { useTranslation } from "@/lib/translations";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation } from "wouter";
 
 export default function CaseConclusion() {
-  const { caseAnalysis, analyzeCase, characters, connections } = useGameStore();
+  const { caseAnalysis, analyzeCase, characters, connections, language } = useGameStore();
+  const t = useTranslation(language);
   const [_, setLocation] = useLocation();
 
   useEffect(() => {
@@ -55,10 +57,10 @@ export default function CaseConclusion() {
               )}
             </div>
             <h1 className="text-5xl md:text-6xl font-mono font-bold text-[#f0f0f0] tracking-tighter">
-              {caseAnalysis.verdict}
+              {t(caseAnalysis.verdict)}
             </h1>
             <p className="text-lg text-[#888] font-mono">
-              Connexions correctes : {caseAnalysis.correctConnections} / {caseAnalysis.totalConnections}
+              {t('conclusion.correct_connections')} : {caseAnalysis.correctConnections} / {caseAnalysis.totalConnections}
             </p>
           </motion.div>
 
@@ -67,28 +69,28 @@ export default function CaseConclusion() {
             <Card className="bg-[#1a1a1a] border-[#333] overflow-hidden">
               <div className={`h-1 w-full ${caseAnalysis.solved ? 'bg-[#fbc02d]' : 'bg-[#d32f2f]'}`} />
               <CardHeader>
-                <CardTitle className="text-[#f0f0f0] text-2xl">Analyse de l'Enquête</CardTitle>
+                <CardTitle className="text-[#f0f0f0] text-2xl">{t('conclusion.title')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-[#0a0a0a] p-6 rounded-lg border border-[#333]">
                   <p className="text-[#ccc] leading-relaxed text-lg font-serif">
-                    {caseAnalysis.explanation}
+                    {t(caseAnalysis.explanation, { count: caseAnalysis.totalConnections })}
                   </p>
                 </div>
 
                 {/* Culprit Profile if Solved */}
                 {caseAnalysis.solved && culprit && (
                   <div className="bg-gradient-to-r from-[#d32f2f]/20 to-transparent p-6 rounded-lg border border-[#d32f2f]/50">
-                    <h3 className="text-[#d32f2f] font-bold text-xl mb-3 uppercase">Le Coupable</h3>
+                    <h3 className="text-[#d32f2f] font-bold text-xl mb-3 uppercase">{t('conclusion.culprit')}</h3>
                     <div className="space-y-2">
                       <p className="text-[#f0f0f0]">
-                        <span className="font-bold">Nom :</span> {culprit.name}
+                        <span className="font-bold">{t('notebook.title_label')} :</span> {t(culprit.name)}
                       </p>
                       <p className="text-[#f0f0f0]">
-                        <span className="font-bold">Rôle :</span> {culprit.role}
+                        <span className="font-bold">Rôle :</span> {t(culprit.role)}
                       </p>
                       <p className="text-[#ccc] mt-3">
-                        {culprit.description}
+                        {t(culprit.description)}
                       </p>
                     </div>
                   </div>
@@ -97,7 +99,7 @@ export default function CaseConclusion() {
                 {/* Key Connections */}
                 {connections.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="text-[#fbc02d] font-bold uppercase">Connexions Créées</h4>
+                    <h4 className="text-[#fbc02d] font-bold uppercase">{t('conclusion.connections_made')}</h4>
                     <div className="space-y-2 max-h-48 overflow-y-auto">
                       {connections.map(conn => (
                         <div
@@ -113,7 +115,7 @@ export default function CaseConclusion() {
                               {conn.clueId1} ↔ {conn.clueId2}
                             </span>
                           </p>
-                          <p className="text-xs text-[#888] mt-1">{conn.reason}</p>
+                          <p className="text-xs text-[#888] mt-1">{t(conn.reason)}</p>
                         </div>
                       ))}
                     </div>
@@ -122,23 +124,23 @@ export default function CaseConclusion() {
 
                 {/* Educational Section */}
                 <div className="bg-[#0a0a0a] p-6 rounded-lg border border-[#333]">
-                  <h4 className="text-[#fbc02d] font-bold uppercase mb-3">Leçons d'Enquête</h4>
+                  <h4 className="text-[#fbc02d] font-bold uppercase mb-3">{t('conclusion.lessons_title')}</h4>
                   <ul className="space-y-2 text-sm text-[#ccc]">
                     <li className="flex gap-2">
                       <span className="text-[#fbc02d]">•</span>
-                      <span>Les apparences peuvent être trompeuses : un artiste mélancolique n'est pas forcément suicidaire.</span>
+                      <span>{t('conclusion.lesson1')}</span>
                     </li>
                     <li className="flex gap-2">
                       <span className="text-[#fbc02d]">•</span>
-                      <span>Les détails physiques sont cruciaux : une piqûre au mauvais bras invalide la thèse du suicide.</span>
+                      <span>{t('conclusion.lesson2')}</span>
                     </li>
                     <li className="flex gap-2">
                       <span className="text-[#fbc02d]">•</span>
-                      <span>Analysez les mobiles, les alibis et les opportunités avant de conclure.</span>
+                      <span>{t('conclusion.lesson3')}</span>
                     </li>
                     <li className="flex gap-2">
                       <span className="text-[#fbc02d]">•</span>
-                      <span>Les contradictions psychologiques (projets futurs) et matérielles (biomécanique) sont des preuves fortes.</span>
+                      <span>{t('conclusion.lesson4')}</span>
                     </li>
                   </ul>
                 </div>
@@ -153,20 +155,20 @@ export default function CaseConclusion() {
               className="bg-[#333] hover:bg-[#444] text-white"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour au Tableau
+              {t('conclusion.back_to_board')}
             </Button>
             <Button
               onClick={() => setLocation('/')}
               className="bg-[#fbc02d] text-black hover:bg-[#f9a825]"
             >
-              Nouvelle Enquête
+              {t('conclusion.restart')}
             </Button>
           </motion.div>
 
           {/* Stats Footer */}
           <motion.div variants={itemVariants} className="text-center text-xs text-[#666] font-mono space-y-1">
             <p>Dossier: #8921-B | Enquêteur: Vous</p>
-            <p>Statut: {caseAnalysis.solved ? 'RÉSOLU' : 'EN COURS'}</p>
+            <p>Statut: {caseAnalysis.solved ? t('conclusion.solved') : t('conclusion.incomplete')}</p>
           </motion.div>
         </motion.div>
       </div>
