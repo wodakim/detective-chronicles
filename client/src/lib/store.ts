@@ -67,6 +67,15 @@ export interface CaseAnalysis {
   explanation: string;
 }
 
+export interface Note {
+  id: string;
+  clueId?: string;
+  title: string;
+  content: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface GameState {
   currentLocationId: string | null;
   clues: Record<string, Clue>;
@@ -75,12 +84,16 @@ export interface GameState {
   connections: Connection[];
   dialogueHistory: string[];
   caseAnalysis: CaseAnalysis | null;
+  notes: Record<string, Note>;
   
   setCurrentLocation: (id: string | null) => void;
   discoverClue: (id: string) => void;
   addConnection: (id1: string, id2: string, type1: 'clue' | 'character', type2: 'clue' | 'character') => boolean;
   clearConnections: () => void;
   analyzeCase: () => CaseAnalysis;
+  addNote: (title: string, content: string, clueId?: string) => string;
+  updateNote: (id: string, title: string, content: string) => void;
+  deleteNote: (id: string) => void;
   resetGame: () => void;
 }
 
@@ -235,7 +248,6 @@ const dialogues: Record<string, DialogueNode[]> = {
 export const getDialoguesForCharacter = (characterId: string) => {
   return dialogues[characterId] || [];
 };
-
 export const useGameStore = create<GameState>((set, get) => ({
   currentLocationId: null,
   clues: initialClues,
@@ -244,7 +256,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   connections: [],
   dialogueHistory: [],
   caseAnalysis: null,
-
+  notes: {},
+  
   setCurrentLocation: (id) => set({ currentLocationId: id }),
   
   discoverClue: (id) => set((state) => ({
@@ -333,12 +346,51 @@ export const useGameStore = create<GameState>((set, get) => ({
     return analysis;
   },
 
+  addNote: (title, content, clueId) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    const note: Note = {
+      id,
+      clueId,
+      title,
+      content,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    set((state) => ({
+      notes: { ...state.notes, [id]: note }
+    }));
+    return id;
+  },
+
+  updateNote: (id, title, content) => {
+    set((state) => ({
+      notes: {
+        ...state.notes,
+        [id]: {
+          ...state.notes[id],
+          title,
+          content,
+          updatedAt: Date.now()
+        }
+      }
+    }));
+  },
+
+  deleteNote: (id) => {
+    set((state) => {
+      const newNotes = { ...state.notes };
+      delete newNotes[id];
+      return { notes: newNotes };
+    });
+  },
+
   resetGame: () => set({
     currentLocationId: null,
     clues: initialClues,
     characters: initialCharacters,
     connections: [],
     dialogueHistory: [],
-    caseAnalysis: null
+    caseAnalysis: null,
+    notes: {}
   })
 }));
