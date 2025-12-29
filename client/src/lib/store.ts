@@ -52,6 +52,7 @@ export interface GameState {
   setCurrentLocation: (id: string | null) => void;
   discoverClue: (id: string) => void;
   addConnection: (id1: string, id2: string, type1: 'clue' | 'character', type2: 'clue' | 'character') => boolean;
+  clearConnections: () => void;
   resetGame: () => void;
 }
 
@@ -159,7 +160,7 @@ export const getSuspects = (characters: Record<string, Character>) => {
   return Object.values(characters).filter(c => c.isSuspect);
 };
 
-export const useGameStore = create<GameState>((set, get) => ({
+export const useGameStore = create<GameState>((set) => ({
   currentLocationId: null,
   clues: initialClues,
   characters: initialCharacters,
@@ -195,6 +196,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     return isCorrect;
   },
+
+  clearConnections: () => set({ connections: [] }),
 
   resetGame: () => set({
     currentLocationId: null,

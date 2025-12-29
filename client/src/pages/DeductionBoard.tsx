@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getSuspects, useGameStore } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Link as LinkIcon, Search, Trash2, X } from "lucide-react";
+import { ArrowLeft, Link as LinkIcon, RotateCcw, Search, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -21,7 +21,7 @@ const getRandomPos = (index: number) => {
 };
 
 export default function DeductionBoard() {
-  const { clues, characters, connections, addConnection, discoverClue } = useGameStore();
+  const { clues, characters, connections, addConnection, discoverClue, clearConnections } = useGameStore();
   const [_, setLocation] = useLocation();
   const [positions, setPositions] = useState<Record<string, { x: number; y: number; rotate: number }>>({});
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -114,6 +114,19 @@ export default function DeductionBoard() {
             <div className="text-sm text-[#666] font-mono hidden md:block">
               {discoveredClues.length} INDICES / {suspects.length} SUSPECTS / {connections.length} LIENS
             </div>
+            {connections.length > 0 && (
+              <Button
+                variant="outline"
+                className="border-[#d32f2f] text-[#d32f2f] hover:bg-[#d32f2f]/10"
+                onClick={() => {
+                  clearConnections();
+                  toast.info("Tableau réinitialisé. Recommencez votre analyse.");
+                }}
+              >
+                <RotateCcw className="mr-2 h-4 w-4" />
+                Réinitialiser
+              </Button>
+            )}
             <Button 
               variant={isConnecting ? "default" : "outline"}
               className={`
