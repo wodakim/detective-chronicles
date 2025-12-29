@@ -1,6 +1,7 @@
 import { useGameStore } from "@/lib/store";
 import { FolderOpen, Map, Search } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
@@ -13,6 +14,7 @@ interface GameLayoutProps {
 export function GameLayout({ children }: GameLayoutProps) {
   const { currentLocationId, setCurrentLocation, locations } = useGameStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [_, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-[#f0f0f0] font-sans flex overflow-hidden">
@@ -63,7 +65,11 @@ export function GameLayout({ children }: GameLayoutProps) {
                 {/* Outils */}
                 <div>
                   <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">Outils</h2>
-                  <Button variant="outline" className="w-full justify-start border-[#444] text-[#ccc] hover:bg-[#333] hover:text-white">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start border-[#444] text-[#ccc] hover:bg-[#333] hover:text-white"
+                    onClick={() => setLocation('/deduction')}
+                  >
                     <Search className="mr-2 h-4 w-4" />
                     Tableau de Déduction
                   </Button>
@@ -79,7 +85,9 @@ export function GameLayout({ children }: GameLayoutProps) {
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon"><Search className="h-5 w-5" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => setLocation('/deduction')}>
+                      <Search className="h-5 w-5" />
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="right">Déduction</TooltipContent>
                 </Tooltip>

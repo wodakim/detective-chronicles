@@ -9,10 +9,12 @@ import { useGameStore } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Eye, FileText, MapPin, Search } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 
 export default function Game() {
   const { currentLocationId, locations, clues, discoverClue, setCurrentLocation } = useGameStore();
   const [selectedClueId, setSelectedClueId] = useState<string | null>(null);
+  const [_, setLocation] = useLocation();
 
   const currentLocation = currentLocationId ? locations[currentLocationId] : null;
 
@@ -148,7 +150,10 @@ export default function Game() {
                   </div>
                   
                   <div className="pt-8">
-                    <Button className="w-full bg-[#333] hover:bg-[#444] text-white justify-between group">
+                    <Button 
+                      className="w-full bg-[#333] hover:bg-[#444] text-white justify-between group"
+                      onClick={() => setLocation('/deduction')}
+                    >
                       Ouvrir le Tableau de Déduction
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
