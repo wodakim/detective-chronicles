@@ -7,12 +7,14 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import CaseConclusion from "./pages/CaseConclusion";
 import DeductionBoard from "./pages/DeductionBoard";
 import Game from "./pages/Game";
+import Interrogation from "./pages/Interrogation";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Game} />
       <Route path="/deduction" component={DeductionBoard} />
+      <Route path="/interrogation" component={Interrogation} />
       <Route path="/conclusion" component={CaseConclusion} />
       <Route component={NotFound} />
     </Switch>

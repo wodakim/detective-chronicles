@@ -41,6 +41,21 @@ export interface Connection {
   isCorrect: boolean;
 }
 
+export interface DialogueOption {
+  id: string;
+  text: string;
+  response: string;
+  revealClue?: string;
+  suspicionIncrease?: number;
+}
+
+export interface DialogueNode {
+  id: string;
+  characterId: string;
+  question: string;
+  options: DialogueOption[];
+}
+
 export interface CaseAnalysis {
   solved: boolean;
   culpritId: string;
@@ -261,3 +276,170 @@ export const useGameStore = create<GameState>((set, get) => ({
     caseAnalysis: null
   })
 }));
+
+
+// Dialogue trees for each suspect
+const dialogues: Record<string, DialogueNode[]> = {
+  'char1': [
+    {
+      id: 'd1-1',
+      characterId: 'char1',
+      question: 'Où étiez-vous le soir du meurtre ?',
+      options: [
+        {
+          id: 'opt1',
+          text: 'Vous dites que vous étiez au bar du club. Quelqu\'un peut le confirmer ?',
+          response: 'Oui, plusieurs personnes m\'ont vu au bar toute la soirée. Le barman peut témoigner.',
+          suspicionIncrease: 0
+        },
+        {
+          id: 'opt2',
+          text: 'Combien de temps avez-vous quitté le bar ?',
+          response: 'Je... je suis allé aux toilettes une ou deux fois. Mais pas longtemps.',
+          suspicionIncrease: 2
+        },
+        {
+          id: 'opt3',
+          text: 'Aviez-vous accès à la loge d\'Elias ?',
+          response: 'Bien sûr, j\'étais son agent. Mais pourquoi cette question ?',
+          suspicionIncrease: 1
+        }
+      ]
+    },
+    {
+      id: 'd1-2',
+      characterId: 'char1',
+      question: 'Quelle était votre relation avec Elias ?',
+      options: [
+        {
+          id: 'opt4',
+          text: 'Vous vous entendiez bien ?',
+          response: 'Excellente relation. Je l\'ai rendu riche et célèbre. Il me devait tout.',
+          suspicionIncrease: 1
+        },
+        {
+          id: 'opt5',
+          text: 'Aviez-vous des conflits récemment ?',
+          response: 'Non, aucun. Pourquoi ? Vous pensez que j\'ai quelque chose à voir avec sa mort ?',
+          suspicionIncrease: 3
+        },
+        {
+          id: 'opt6',
+          text: 'Elias parlait-il de vouloir changer d\'agent ?',
+          response: 'Quoi ? Non... enfin, il y a eu quelques discussions, mais rien de sérieux.',
+          suspicionIncrease: 4,
+          revealClue: 'c1'
+        }
+      ]
+    }
+  ],
+  'char2': [
+    {
+      id: 'd2-1',
+      characterId: 'char2',
+      question: 'Où étiez-vous le soir du meurtre ?',
+      options: [
+        {
+          id: 'opt7',
+          text: 'Vous dites que vous étiez en coulisses. Quelqu\'un vous a vu ?',
+          response: 'J\'étais seule. Je me préparais mentalement pour ma performance après Elias.',
+          suspicionIncrease: 2
+        },
+        {
+          id: 'opt8',
+          text: 'Aviez-vous accès à la loge d\'Elias ?',
+          response: 'Oui, comme tous les artistes. Mais je n\'y suis pas allée ce soir-là.',
+          suspicionIncrease: 1
+        },
+        {
+          id: 'opt9',
+          text: 'Avez-vous vu quelque chose de suspect ?',
+          response: 'Non, rien. J\'étais trop concentrée sur ma performance.',
+          suspicionIncrease: 0
+        }
+      ]
+    },
+    {
+      id: 'd2-2',
+      characterId: 'char2',
+      question: 'Comment était votre relation avec Elias ?',
+      options: [
+        {
+          id: 'opt10',
+          text: 'Vous vous entendiez bien ?',
+          response: 'Bien sûr. C\'était un grand musicien. Je l\'admirais.',
+          suspicionIncrease: 0
+        },
+        {
+          id: 'opt11',
+          text: 'Aviez-vous des tensions professionnelles ?',
+          response: 'Tensions ? Non, pas vraiment. Enfin... il avait toujours les meilleurs rôles, les meilleures salles.',
+          suspicionIncrease: 2
+        },
+        {
+          id: 'opt12',
+          text: 'Aviez-vous envie de sa place ?',
+          response: 'Quoi ? Non ! Enfin... c\'est normal de vouloir progresser dans ce métier.',
+          suspicionIncrease: 3
+        }
+      ]
+    }
+  ],
+  'char3': [
+    {
+      id: 'd3-1',
+      characterId: 'char3',
+      question: 'Où étiez-vous le soir du meurtre ?',
+      options: [
+        {
+          id: 'opt13',
+          text: 'Vous dites que vous étiez chez vous. Quelqu\'un peut le confirmer ?',
+          response: 'J\'étais seul. Je lis généralement le soir.',
+          suspicionIncrease: 2
+        },
+        {
+          id: 'opt14',
+          text: 'Votre voiture a été vue près du club ce soir-là.',
+          response: 'Quoi ? C\'est impossible. Ma voiture était au garage.',
+          suspicionIncrease: 4
+        },
+        {
+          id: 'opt15',
+          text: 'Aviez-vous accès à la loge d\'Elias ?',
+          response: 'Oui, en tant que son frère. Mais je n\'y suis pas allé.',
+          suspicionIncrease: 1
+        }
+      ]
+    },
+    {
+      id: 'd3-2',
+      characterId: 'char3',
+      question: 'Comment était votre relation avec Elias ?',
+      options: [
+        {
+          id: 'opt16',
+          text: 'Vous vous entendiez bien ?',
+          response: 'Bien sûr. C\'était mon frère. Nous nous voyions régulièrement.',
+          suspicionIncrease: 0
+        },
+        {
+          id: 'opt17',
+          text: 'Aviez-vous des conflits familiaux ?',
+          response: 'Non, aucun. Pourquoi cette question ?',
+          suspicionIncrease: 1
+        },
+        {
+          id: 'opt18',
+          text: 'Héritiez-vous de quelque chose à sa mort ?',
+          response: 'Héritage ? Je... je ne sais pas. C\'est une question étrange.',
+          suspicionIncrease: 3,
+          revealClue: 'c2'
+        }
+      ]
+    }
+  ]
+};
+
+export const getDialoguesForCharacter = (characterId: string) => {
+  return dialogues[characterId] || [];
+};

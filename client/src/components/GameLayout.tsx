@@ -1,5 +1,5 @@
 import { useGameStore } from "@/lib/store";
-import { FolderOpen, Map, Search } from "lucide-react";
+import { FolderOpen, Map, MessageCircle, Search } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "./ui/button";
@@ -65,14 +65,24 @@ export function GameLayout({ children }: GameLayoutProps) {
                 {/* Outils */}
                 <div>
                   <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">Outils</h2>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-start border-[#444] text-[#ccc] hover:bg-[#333] hover:text-white"
-                    onClick={() => setLocation('/deduction')}
-                  >
-                    <Search className="mr-2 h-4 w-4" />
-                    Tableau de Déduction
-                  </Button>
+                  <div className="space-y-2">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start border-[#444] text-[#ccc] hover:bg-[#333] hover:text-white"
+                      onClick={() => setLocation('/interrogation')}
+                    >
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Interrogatoires
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start border-[#444] text-[#ccc] hover:bg-[#333] hover:text-white"
+                      onClick={() => setLocation('/deduction')}
+                    >
+                      <Search className="mr-2 h-4 w-4" />
+                      Tableau de Déduction
+                    </Button>
+                  </div>
                 </div>
               </>
             ) : (
@@ -82,6 +92,14 @@ export function GameLayout({ children }: GameLayoutProps) {
                     <Button variant="ghost" size="icon"><Map className="h-5 w-5" /></Button>
                   </TooltipTrigger>
                   <TooltipContent side="right">Lieux</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={() => setLocation('/interrogation')}>
+                      <MessageCircle className="h-5 w-5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Interrogatoires</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
