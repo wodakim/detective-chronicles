@@ -85,6 +85,8 @@ export interface GameState {
   dialogueHistory: string[];
   caseAnalysis: CaseAnalysis | null;
   notes: Record<string, Note>;
+  language: 'fr' | 'en' | 'pl';
+  saves: Record<string, { timestamp: number; state: Partial<GameState> }>;
   
   setCurrentLocation: (id: string | null) => void;
   discoverClue: (id: string) => void;
@@ -94,6 +96,10 @@ export interface GameState {
   addNote: (title: string, content: string, clueId?: string) => string;
   updateNote: (id: string, title: string, content: string) => void;
   deleteNote: (id: string) => void;
+  setLanguage: (lang: 'fr' | 'en' | 'pl') => void;
+  saveGame: (slot: number) => void;
+  loadGame: (slot: number) => boolean;
+  deleteSave: (slot: number) => void;
   resetGame: () => void;
 }
 
@@ -257,6 +263,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   dialogueHistory: [],
   caseAnalysis: null,
   notes: {},
+  language: 'fr',
+  saves: {},
   
   setCurrentLocation: (id) => set({ currentLocationId: id }),
   
@@ -384,6 +392,53 @@ export const useGameStore = create<GameState>((set, get) => ({
     });
   },
 
+  setLanguage: (lang) => set({ language: lang }),
+
+  saveGame: (slot) => {
+    const state = get();
+    const saveData = {
+      timestamp: Date.now(),
+      state: {
+        currentLocationId: state.currentLocationId,
+        clues: state.clues,
+        characters: state.characters,
+        connections: state.connections,
+        caseAnalysis: state.caseAnalysis,
+        notes: state.notes,
+        dialogueHistory: state.dialogueHistory
+      }
+    };
+    set((s) => ({
+      saves: { ...s.saves, [slot]: saveData }
+    }));
+    localStorage.setItem(`detective-save-${slot}`, JSON.stringify(saveData));
+  },
+
+  loadGame: (slot) => {
+    const saved = localStorage.getItem(`detective-save-${slot}`);
+    if (!saved) return false;
+    try {
+      const saveData = JSON.parse(saved);
+      set((s) => ({
+        ...s,
+        ...saveData.state,
+        saves: { ...s.saves, [slot]: saveData }
+      }));
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
+  deleteSave: (slot) => {
+    set((state) => {
+      const newSaves = { ...state.saves };
+      delete newSaves[slot];
+      return { saves: newSaves };
+    });
+    localStorage.removeItem(`detective-save-${slot}`);
+  },
+
   resetGame: () => set({
     currentLocationId: null,
     clues: initialClues,
@@ -391,6 +446,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     connections: [],
     dialogueHistory: [],
     caseAnalysis: null,
-    notes: {}
+    notes: {},
+    language: 'fr',
+    saves: {}
   })
 }));

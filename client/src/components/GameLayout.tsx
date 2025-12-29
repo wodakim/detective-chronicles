@@ -1,5 +1,5 @@
 import { useGameStore } from "@/lib/store";
-import { FolderOpen, Map, MessageCircle, Notebook, Search } from "lucide-react";
+import { FolderOpen, Map, MessageCircle, Notebook, Search, Settings } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "./ui/button";
@@ -90,6 +90,14 @@ export function GameLayout({ children }: GameLayoutProps) {
                       <Search className="mr-2 h-4 w-4" />
                       Tableau de Déduction
                     </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start border-[#444] text-[#ccc] hover:bg-[#333] hover:text-white"
+                      onClick={() => setLocation('/settings')}
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Paramètres
+                    </Button>
                   </div>
                 </div>
               </>
@@ -124,6 +132,14 @@ export function GameLayout({ children }: GameLayoutProps) {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="right">Déduction</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={() => setLocation('/settings')}>
+                      <Settings className="h-5 w-5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Paramètres</TooltipContent>
                 </Tooltip>
               </div>
             )}

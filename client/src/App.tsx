@@ -9,6 +9,7 @@ import DeductionBoard from "./pages/DeductionBoard";
 import Game from "./pages/Game";
 import Interrogation from "./pages/Interrogation";
 import Notebook from "./pages/Notebook";
+import Settings from "./pages/Settings";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/deduction" component={DeductionBoard} />
       <Route path="/interrogation" component={Interrogation} />
       <Route path="/notebook" component={Notebook} />
+      <Route path="/settings" component={Settings} />
       <Route path="/conclusion" component={CaseConclusion} />
       <Route component={NotFound} />
     </Switch>
