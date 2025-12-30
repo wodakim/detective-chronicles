@@ -81,7 +81,7 @@ export default function Game() {
                 <MapPin className="h-5 w-5" />
                 <span className="text-sm font-bold tracking-widest uppercase">Lieu Actuel</span>
               </div>
-              <h2 className="text-4xl font-bold font-mono text-white mb-2">{t(`loc.${currentLocation.id.replace('loc', '')}`) || currentLocation.name}</h2>
+              <h2 className="text-4xl font-bold font-mono text-white mb-2">{t(`loc.${currentLocation.id}`) || currentLocation.name}</h2>
               <p className="text-[#ccc] max-w-xl text-lg">{currentLocation.description}</p>
             </div>
           </div>
