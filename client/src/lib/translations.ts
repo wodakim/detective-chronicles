@@ -211,7 +211,9 @@ export const translations: Record<Language, Record<string, string>> = {
     'clue.c35': 'Rapport toxicologique',
     'clue.c36': 'Heure du décès',
     'clue.c37': 'Alibi de Marcus',
-    'clue.c38':  en: {
+    'clue.c38': 'Alibi de Sarah',
+  },
+  en: {
     // Navigation
     'nav.home': 'Home',
     'nav.tools': 'Tools',
