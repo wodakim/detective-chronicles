@@ -74,8 +74,9 @@ export default function DeductionBoard() {
         ...prev,
         [id]: {
           ...prev[id],
-          x: prev[id].x + (info.offset.x || 0),
-          y: prev[id].y + (info.offset.y || 0)
+          // Adjust drag offset by zoom level to keep items under the cursor
+          x: prev[id].x + (info.offset.x || 0) / zoom,
+          y: prev[id].y + (info.offset.y || 0) / zoom
         }
       };
     });
@@ -258,7 +259,7 @@ export default function DeductionBoard() {
           
           {/* SVG Layer for Connections */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-            <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`}>
+            <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`} style={{ transformOrigin: '0 0' }}>
             {connections.map(conn => {
               const pos1 = positions[conn.clueId1];
               const pos2 = positions[conn.clueId2];
@@ -299,10 +300,10 @@ export default function DeductionBoard() {
 
           {/* Draggable Clues */}
           <div 
-            className="absolute inset-0 z-10 transition-transform duration-200"
+            className="absolute inset-0 z-10"
             style={{
               transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-              transformOrigin: 'center center'
+              transformOrigin: '0 0'
             }}
           >
             {discoveredClues.map((clue) => {
