@@ -106,18 +106,18 @@ export interface GameState {
 
 // Initial Clues with translation keys
 const initialClues: Record<string, Clue> = {
-  'c1': { id: 'c1', title: 'clue.c1.title', description: 'clue.c1.desc', type: 'visual', isDiscovered: false, locationId: 'loc1' },
-  'c2': { id: 'c2', title: 'clue.c2.title', description: 'clue.c2.desc', type: 'document', content: 'clue.c2.content', isDiscovered: false, locationId: 'loc1', isMisleading: true },
-  'c3': { id: 'c3', title: 'clue.c3.title', description: 'clue.c3.desc', type: 'object', isDiscovered: false, locationId: 'loc1' },
-  'c4': { id: 'c4', title: 'clue.c4.title', description: 'clue.c4.desc', type: 'medical', isDiscovered: true, locationId: 'loc3' },
-  'c5': { id: 'c5', title: 'clue.c5.title', description: 'clue.c5.desc', type: 'medical', isDiscovered: false, locationId: 'loc1' },
-  'c8': { id: 'c8', title: 'clue.c8.title', description: 'clue.c8.desc', type: 'document', content: 'clue.c8.content', isDiscovered: false, locationId: 'loc1' },
-  'c11': { id: 'c11', title: 'clue.c11.title', description: 'clue.c11.desc', type: 'financial', isDiscovered: false, locationId: 'loc2' },
-  'c12': { id: 'c12', title: 'clue.c12.title', description: 'clue.c12.desc', type: 'financial', isDiscovered: false, locationId: 'loc2' },
-  'c14': { id: 'c14', title: 'clue.c14.title', description: 'clue.c14.desc', type: 'document', isDiscovered: false, locationId: 'loc2' },
+  'c1': { id: 'c1', title: 'clue.c1.title', description: 'clue.c1.desc', type: 'visual', isDiscovered: false, locationId: 'loc1', image: '/images/clues/morphine_vial.jpg' },
+  'c2': { id: 'c2', title: 'clue.c2.title', description: 'clue.c2.desc', type: 'document', content: 'clue.c2.content', isDiscovered: false, locationId: 'loc1', isMisleading: true, image: '/images/clues/will_document.jpg' },
+  'c3': { id: 'c3', title: 'clue.c3.title', description: 'clue.c3.desc', type: 'object', isDiscovered: false, locationId: 'loc1', image: '/images/clues/broken_violin_string.jpg' },
+  'c4': { id: 'c4', title: 'clue.c4.title', description: 'clue.c4.desc', type: 'medical', isDiscovered: true, locationId: 'loc3', image: '/images/clues/morphine_vial.jpg' },
+  'c5': { id: 'c5', title: 'clue.c5.title', description: 'clue.c5.desc', type: 'medical', isDiscovered: false, locationId: 'loc1', image: '/images/clues/morphine_vial.jpg' },
+  'c8': { id: 'c8', title: 'clue.c8.title', description: 'clue.c8.desc', type: 'document', content: 'clue.c8.content', isDiscovered: false, locationId: 'loc1', image: '/images/clues/love_letter.jpg' },
+  'c11': { id: 'c11', title: 'clue.c11.title', description: 'clue.c11.desc', type: 'financial', isDiscovered: false, locationId: 'loc2', image: '/images/clues/torn_contract.jpg' },
+  'c12': { id: 'c12', title: 'clue.c12.title', description: 'clue.c12.desc', type: 'financial', isDiscovered: false, locationId: 'loc2', image: '/images/clues/torn_contract.jpg' },
+  'c14': { id: 'c14', title: 'clue.c14.title', description: 'clue.c14.desc', type: 'document', isDiscovered: false, locationId: 'loc2', image: '/images/clues/love_letter.jpg' },
   'c21': { id: 'c21', title: 'clue.c21.title', description: 'clue.c21.desc', type: 'video', isDiscovered: false, locationId: 'loc5' },
-  'c23': { id: 'c23', title: 'clue.c23.title', description: 'clue.c23.desc', type: 'document', isDiscovered: false, locationId: 'loc5' },
-  'c30': { id: 'c30', title: 'clue.c30.title', description: 'clue.c30.desc', type: 'document', isDiscovered: false, locationId: 'loc7' }
+  'c23': { id: 'c23', title: 'clue.c23.title', description: 'clue.c23.desc', type: 'document', isDiscovered: false, locationId: 'loc5', image: '/images/clues/will_document.jpg' },
+  'c30': { id: 'c30', title: 'clue.c30.title', description: 'clue.c30.desc', type: 'document', isDiscovered: false, locationId: 'loc7', image: '/images/clues/will_document.jpg' }
 };
 
 // Initial Locations with translation keys
@@ -133,13 +133,13 @@ const initialLocations: Record<string, Location> = {
 
 // Initial Characters with translation keys
 const initialCharacters: Record<string, Character> = {
-  'char1': { id: 'char1', name: 'char.char1.name', role: 'char.char1.role', description: 'char.char1.desc', image: '/images/case_file_cover.jpg', isSuspect: true, suspicionLevel: 0 },
-  'char2': { id: 'char2', name: 'char.char2.name', role: 'char.char2.role', description: 'char.char2.desc', image: '/images/case_file_cover.jpg', isSuspect: true, suspicionLevel: 0 },
-  'char3': { id: 'char3', name: 'char.char3.name', role: 'char.char3.role', description: 'char.char3.desc', image: '/images/case_file_cover.jpg', isSuspect: true, suspicionLevel: 0 },
-  'char4': { id: 'char4', name: 'char.char4.name', role: 'char.char4.role', description: 'char.char4.desc', image: '/images/case_file_cover.jpg', isSuspect: false, suspicionLevel: 0 },
-  'char5': { id: 'char5', name: 'char.char5.name', role: 'char.char5.role', description: 'char.char5.desc', image: '/images/case_file_cover.jpg', isSuspect: false, suspicionLevel: 0 },
-  'char6': { id: 'char6', name: 'char.char6.name', role: 'char.char6.role', description: 'char.char6.desc', image: '/images/case_file_cover.jpg', isSuspect: false, suspicionLevel: 0 },
-  'char7': { id: 'char7', name: 'char.char7.name', role: 'char.char7.role', description: 'char.char7.desc', image: '/images/case_file_cover.jpg', isSuspect: false, suspicionLevel: 0 }
+  'char1': { id: 'char1', name: 'char.char1.name', role: 'char.char1.role', description: 'char.char1.desc', image: '/images/characters/marcus_vane.jpg', isSuspect: true, suspicionLevel: 0 },
+  'char2': { id: 'char2', name: 'char.char2.name', role: 'char.char2.role', description: 'char.char2.desc', image: '/images/characters/sarah_jenkins.jpg', isSuspect: true, suspicionLevel: 0 },
+  'char3': { id: 'char3', name: 'char.char3.name', role: 'char.char3.role', description: 'char.char3.desc', image: '/images/characters/aris_thorne.jpg', isSuspect: true, suspicionLevel: 0 },
+  'char4': { id: 'char4', name: 'char.char4.name', role: 'char.char4.role', description: 'char.char4.desc', image: '/images/characters/witness_club.jpg', isSuspect: false, suspicionLevel: 0 },
+  'char5': { id: 'char5', name: 'char.char5.name', role: 'char.char5.role', description: 'char.char5.desc', image: '/images/characters/witness_club.jpg', isSuspect: false, suspicionLevel: 0 },
+  'char6': { id: 'char6', name: 'char.char6.name', role: 'char.char6.role', description: 'char.char6.desc', image: '/images/characters/witness_club.jpg', isSuspect: false, suspicionLevel: 0 },
+  'char7': { id: 'char7', name: 'char.char7.name', role: 'char.char7.role', description: 'char.char7.desc', image: '/images/characters/elias_thorne.jpg', isSuspect: false, suspicionLevel: 0 }
 };
 
 export const getSuspects = (characters: Record<string, Character>) => {
