@@ -159,6 +159,60 @@ const dialogues: Record<string, DialogueNode[]> = {
         { id: 'opt2', text: 'interrogation.marcus.q1.opt2', response: 'interrogation.marcus.q1.opt2.resp', suspicionIncrease: 2 },
         { id: 'opt3', text: 'interrogation.marcus.q1.opt3', response: 'interrogation.marcus.q1.opt3.resp', suspicionIncrease: 1 }
       ]
+    },
+    {
+      id: 'd1-2',
+      characterId: 'char1',
+      question: 'interrogation.marcus.q2',
+      options: [
+        { id: 'opt1', text: 'interrogation.marcus.q2.opt1', response: 'interrogation.marcus.q2.opt1.resp', suspicionIncrease: 1, revealClue: 'c11' },
+        { id: 'opt2', text: 'interrogation.marcus.q2.opt2', response: 'interrogation.marcus.q2.opt2.resp', suspicionIncrease: 0 },
+        { id: 'opt3', text: 'interrogation.marcus.q2.opt3', response: 'interrogation.marcus.q2.opt3.resp', suspicionIncrease: 2 }
+      ]
+    }
+  ],
+  'char2': [
+    {
+      id: 'd2-1',
+      characterId: 'char2',
+      question: 'interrogation.sarah.q1',
+      options: [
+        { id: 'opt1', text: 'interrogation.sarah.q1.opt1', response: 'interrogation.sarah.q1.opt1.resp', suspicionIncrease: 0 },
+        { id: 'opt2', text: 'interrogation.sarah.q1.opt2', response: 'interrogation.sarah.q1.opt2.resp', suspicionIncrease: 1 },
+        { id: 'opt3', text: 'interrogation.sarah.q1.opt3', response: 'interrogation.sarah.q1.opt3.resp', suspicionIncrease: 2, revealClue: 'c14' }
+      ]
+    },
+    {
+      id: 'd2-2',
+      characterId: 'char2',
+      question: 'interrogation.sarah.q2',
+      options: [
+        { id: 'opt1', text: 'interrogation.sarah.q2.opt1', response: 'interrogation.sarah.q2.opt1.resp', suspicionIncrease: 0 },
+        { id: 'opt2', text: 'interrogation.sarah.q2.opt2', response: 'interrogation.sarah.q2.opt2.resp', suspicionIncrease: 1 },
+        { id: 'opt3', text: 'interrogation.sarah.q2.opt3', response: 'interrogation.sarah.q2.opt3.resp', suspicionIncrease: 0 }
+      ]
+    }
+  ],
+  'char3': [
+    {
+      id: 'd3-1',
+      characterId: 'char3',
+      question: 'interrogation.aris.q1',
+      options: [
+        { id: 'opt1', text: 'interrogation.aris.q1.opt1', response: 'interrogation.aris.q1.opt1.resp', suspicionIncrease: 0, revealClue: 'c30' },
+        { id: 'opt2', text: 'interrogation.aris.q1.opt2', response: 'interrogation.aris.q1.opt2.resp', suspicionIncrease: 1 },
+        { id: 'opt3', text: 'interrogation.aris.q1.opt3', response: 'interrogation.aris.q1.opt3.resp', suspicionIncrease: 2 }
+      ]
+    },
+    {
+      id: 'd3-2',
+      characterId: 'char3',
+      question: 'interrogation.aris.q2',
+      options: [
+        { id: 'opt1', text: 'interrogation.aris.q2.opt1', response: 'interrogation.aris.q2.opt1.resp', suspicionIncrease: 0 },
+        { id: 'opt2', text: 'interrogation.aris.q2.opt2', response: 'interrogation.aris.q2.opt2.resp', suspicionIncrease: 1 },
+        { id: 'opt3', text: 'interrogation.aris.q2.opt3', response: 'interrogation.aris.q2.opt3.resp', suspicionIncrease: 0 }
+      ]
     }
   ]
 };

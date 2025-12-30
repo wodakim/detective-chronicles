@@ -31,6 +31,10 @@ export default function DeductionBoard() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionStartId, setConnectionStartId] = useState<string | null>(null);
   const [connectionStartType, setConnectionStartType] = useState<'clue' | 'character' | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -75,6 +79,46 @@ export default function DeductionBoard() {
         }
       };
     });
+  };
+
+  const handleZoomIn = () => {
+    setZoom(prev => Math.min(prev + 0.2, 2));
+  };
+
+  const handleZoomOut = () => {
+    setZoom(prev => Math.max(prev - 0.2, 0.5));
+  };
+
+  const handleResetView = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    setZoom(prev => Math.max(0.5, Math.min(2, prev + delta)));
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button === 1 || (e.button === 0 && e.shiftKey)) {
+      setIsPanning(true);
+      setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+      e.preventDefault();
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isPanning) {
+      setPan({
+        x: e.clientX - panStart.x,
+        y: e.clientY - panStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
   };
 
   const handleItemClick = (id: string, type: 'clue' | 'character') => {
@@ -129,6 +173,37 @@ export default function DeductionBoard() {
             <div className="text-sm text-[#666] font-mono hidden md:block">
               {discoveredClues.length} {t('deduction.clues')} / {suspects.length} {t('deduction.suspects')} / {connections.length} {t('deduction.connections')}
             </div>
+            <div className="h-6 w-px bg-[#333] hidden md:block" />
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#333] text-[#888] hover:text-white h-8 w-8 p-0"
+                onClick={handleZoomOut}
+                title="Zoom arrière"
+              >
+                -
+              </Button>
+              <span className="text-xs text-[#666] font-mono min-w-[45px] text-center">{Math.round(zoom * 100)}%</span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#333] text-[#888] hover:text-white h-8 w-8 p-0"
+                onClick={handleZoomIn}
+                title="Zoom avant"
+              >
+                +
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#333] text-[#888] hover:text-white h-8 px-2"
+                onClick={handleResetView}
+                title="Réinitialiser la vue"
+              >
+                <RotateCcw className="h-3 w-3" />
+              </Button>
+            </div>
             {connections.length > 0 && (
               <div className="flex gap-2">
                 <Button
@@ -172,12 +247,18 @@ export default function DeductionBoard() {
         {/* Board Area */}
         <div 
           ref={containerRef}
-          className="flex-1 relative overflow-hidden bg-[url('/images/investigation_board.jpg')] bg-cover bg-center"
+          className="flex-1 relative overflow-hidden bg-[url('/images/investigation_board.jpg')] bg-cover bg-center cursor-move"
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
           
           {/* SVG Layer for Connections */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+            <g transform={`translate(${pan.x}, ${pan.y}) scale(${zoom})`}>
             {connections.map(conn => {
               const pos1 = positions[conn.clueId1];
               const pos2 = positions[conn.clueId2];
@@ -213,10 +294,17 @@ export default function DeductionBoard() {
                 className="animate-ping"
               />
             )}
+            </g>
           </svg>
 
           {/* Draggable Clues */}
-          <div className="absolute inset-0 z-10">
+          <div 
+            className="absolute inset-0 z-10 transition-transform duration-200"
+            style={{
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              transformOrigin: 'center center'
+            }}
+          >
             {discoveredClues.map((clue) => {
               const pos = positions[clue.id] || { x: 0, y: 0, rotate: 0 };
               const isSelected = connectionStartId === clue.id && connectionStartType === 'clue';
