@@ -264,8 +264,8 @@ export default function DeductionBoard() {
               const pos2 = positions[conn.clueId2];
               if (!pos1 || !pos2) return null;
               
-              const p1 = { x: pos1.x + 100, y: pos1.y + 60 };
-              const p2 = { x: pos2.x + 100, y: pos2.y + 60 };
+              const p1 = { x: pos1.x + 100, y: pos1.y + 75 };
+              const p2 = { x: pos2.x + 100, y: pos2.y + 75 };
 
               return (
                 <g key={conn.id}>
@@ -286,7 +286,7 @@ export default function DeductionBoard() {
             {isConnecting && connectionStartId && positions[connectionStartId] && (
               <circle 
                 cx={positions[connectionStartId].x + 100} 
-                cy={positions[connectionStartId].y + 60} 
+                cy={positions[connectionStartId].y + 75} 
                 r="8" 
                 fill="none" 
                 stroke="#fbc02d" 
@@ -324,13 +324,13 @@ export default function DeductionBoard() {
                     zIndex: isSelected ? 50 : 1
                   }}
                   className={`
-                    absolute w-[200px] cursor-grab active:cursor-grabbing
+                    absolute w-[200px] h-[150px] cursor-grab active:cursor-grabbing
                     ${isConnecting ? 'cursor-crosshair' : ''}
                   `}
                   onClick={() => handleItemClick(clue.id, 'clue')}
                 >
                   <Card className={`
-                    bg-[#f5f5f5] text-black shadow-xl border-0 overflow-hidden
+                    bg-[#f5f5f5] text-black shadow-xl border-0 overflow-hidden h-full
                     ${isSelected ? 'ring-4 ring-[#fbc02d]' : ''}
                     transform transition-shadow duration-200
                   `}>
@@ -369,13 +369,13 @@ export default function DeductionBoard() {
                     zIndex: isSelected ? 50 : 1
                   }}
                   className={`
-                    absolute w-[200px] cursor-grab active:cursor-grabbing
+                    absolute w-[200px] h-[150px] cursor-grab active:cursor-grabbing
                     ${isConnecting ? 'cursor-crosshair' : ''}
                   `}
                   onClick={() => handleItemClick(suspect.id, 'character')}
                 >
                   <Card className={`
-                    bg-[#f0f0f0] text-black shadow-xl border-2 border-[#d32f2f] overflow-hidden
+                    bg-[#f0f0f0] text-black shadow-xl border-2 border-[#d32f2f] overflow-hidden h-full
                     ${isSelected ? 'ring-4 ring-[#fbc02d]' : ''}
                     transform transition-shadow duration-200
                   `}>
