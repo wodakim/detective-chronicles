@@ -93,6 +93,13 @@ export const translations: Record<Language, Record<string, string>> = {
     'interrogation.new_clue': 'Nouvel indice découvert !',
     'interrogation.new_clue_discovered': 'Nouvel indice découvert',
     'interrogation.suspicion_increase': 'Le niveau de suspicion a augmenté',
+    'interrogation.marcus.q1': 'Où étiez-vous hier soir à 22h30 ?',
+    'interrogation.marcus.q1.opt1': 'J\'étais dans mon bureau, je travaillais sur des contrats.',
+    'interrogation.marcus.q1.opt1.resp': 'Je travaillais tard. Vous pouvez vérifier mes connexions informatiques si vous ne me croyez pas.',
+    'interrogation.marcus.q1.opt2': 'Pourquoi me demandez-vous ça ? Ça ressemble à une accusation.',
+    'interrogation.marcus.q1.opt2.resp': 'Je n\'aime pas votre ton. J\'étais... occupé avec des affaires personnelles.',
+    'interrogation.marcus.q1.opt3': 'J\'étais au club, mais je suis parti tôt.',
+    'interrogation.marcus.q1.opt3.resp': 'Je suis parti vers 21h00. Elias était encore en vie, je l\'ai vu dans les loges.',
     
     // Deduction Board
     'deduction.title': 'TABLEAU DE DÉDUCTION',
@@ -306,6 +313,13 @@ export const translations: Record<Language, Record<string, string>> = {
     'interrogation.new_clue': 'New clue discovered!',
     'interrogation.new_clue_discovered': 'New clue discovered',
     'interrogation.suspicion_increase': 'Suspicion level increased',
+    'interrogation.marcus.q1': 'Where were you last night at 10:30 PM?',
+    'interrogation.marcus.q1.opt1': 'I was in my office, working on contracts.',
+    'interrogation.marcus.q1.opt1.resp': 'I was working late. You can check my computer login if you don\'t believe me.',
+    'interrogation.marcus.q1.opt2': 'Why are you asking me this? That sounds like an accusation.',
+    'interrogation.marcus.q1.opt2.resp': 'I don\'t like your tone. I was... busy with personal matters.',
+    'interrogation.marcus.q1.opt3': 'I was at the club, but I left early.',
+    'interrogation.marcus.q1.opt3.resp': 'I left around 9:00 PM. Elias was still alive, I saw him in the dressing room.',
     
     // Deduction Board
     'deduction.title': 'DEDUCTION BOARD',
