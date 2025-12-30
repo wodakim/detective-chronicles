@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type ClueType = 'visual' | 'document' | 'object' | 'testimony' | 'medical' | 'video' | 'financial';
 
@@ -166,7 +167,7 @@ export const getDialoguesForCharacter = (characterId: string) => {
   return dialogues[characterId] || [];
 };
 
-export const useGameStore = create<GameState>((set, get) => ({
+export const useGameStore = create<GameState>()(persist((set, get) => ({
   currentLocationId: null,
   clues: initialClues,
   characters: initialCharacters,
@@ -332,5 +333,18 @@ export const useGameStore = create<GameState>((set, get) => ({
     dialogueHistory: [],
     caseAnalysis: null,
     notes: {}
+  })
+}), {
+  name: 'detective-chronicles-storage',
+  partialize: (state) => ({
+    currentLocationId: state.currentLocationId,
+    clues: state.clues,
+    characters: state.characters,
+    locations: state.locations,
+    connections: state.connections,
+    notes: state.notes,
+    language: state.language,
+    saves: state.saves,
+    caseAnalysis: state.caseAnalysis
   })
 }));

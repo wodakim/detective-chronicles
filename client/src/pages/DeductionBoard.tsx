@@ -42,14 +42,14 @@ export default function DeductionBoard() {
     let hasChanges = false;
     
     discoveredClues.forEach((clue, index) => {
-      if (!newPositions[clue.id]) {
+      if (clue && clue.id && !newPositions[clue.id]) {
         newPositions[clue.id] = getRandomPos(index);
         hasChanges = true;
       }
     });
 
     suspects.forEach((suspect, index) => {
-      if (!newPositions[suspect.id]) {
+      if (suspect && suspect.id && !newPositions[suspect.id]) {
         newPositions[suspect.id] = getRandomPos(discoveredClues.length + index);
         hasChanges = true;
       }
@@ -61,17 +61,25 @@ export default function DeductionBoard() {
   }, [discoveredClues.length, suspects.length]);
 
   const handleDragEnd = (id: string, info: any) => {
-    setPositions(prev => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        x: prev[id].x + info.offset.x,
-        y: prev[id].y + info.offset.y
-      }
-    }));
+    if (!id || !info || !info.offset) return;
+    
+    setPositions(prev => {
+      if (!prev[id]) return prev;
+      
+      return {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          x: prev[id].x + (info.offset.x || 0),
+          y: prev[id].y + (info.offset.y || 0)
+        }
+      };
+    });
   };
 
   const handleItemClick = (id: string, type: 'clue' | 'character') => {
+    if (!id || !type) return;
+    
     if (isConnecting) {
       if (connectionStartId === null) {
         setConnectionStartId(id);
@@ -82,11 +90,16 @@ export default function DeductionBoard() {
         setConnectionStartType(null);
         toast.info(t('deduction.selection_cancelled'));
       } else {
-        const success = addConnection(connectionStartId, id, connectionStartType!, type);
-        if (success) {
-          toast.success(t('deduction.relevant_connection'));
-        } else {
-          toast.error(t('deduction.potential_connection'));
+        try {
+          const success = addConnection(connectionStartId, id, connectionStartType!, type);
+          if (success) {
+            toast.success(t('deduction.relevant_connection'));
+          } else {
+            toast.error(t('deduction.potential_connection'));
+          }
+        } catch (error) {
+          console.error('Erreur lors de la création de la connexion:', error);
+          toast.error('Impossible de créer cette connexion');
         }
         setConnectionStartId(null);
         setConnectionStartType(null);

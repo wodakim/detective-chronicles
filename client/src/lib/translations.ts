@@ -94,11 +94,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'interrogation.new_clue_discovered': 'Nouvel indice découvert',
     'interrogation.suspicion_increase': 'Le niveau de suspicion a augmenté',
     'interrogation.marcus.q1': 'Où étiez-vous hier soir à 22h30 ?',
-    'interrogation.marcus.q1.opt1': 'J\'étais dans mon bureau, je travaillais sur des contrats.',
+    'interrogation.marcus.q1.opt1': 'Étiez-vous dans votre bureau à travailler sur des contrats ?',
     'interrogation.marcus.q1.opt1.resp': 'Je travaillais tard. Vous pouvez vérifier mes connexions informatiques si vous ne me croyez pas.',
-    'interrogation.marcus.q1.opt2': 'Pourquoi me demandez-vous ça ? Ça ressemble à une accusation.',
+    'interrogation.marcus.q1.opt2': 'Pourquoi évitez-vous de répondre directement ? Vous cachez quelque chose ?',
     'interrogation.marcus.q1.opt2.resp': 'Je n\'aime pas votre ton. J\'étais... occupé avec des affaires personnelles.',
-    'interrogation.marcus.q1.opt3': 'J\'étais au club, mais je suis parti tôt.',
+    'interrogation.marcus.q1.opt3': 'Quelqu\'un vous a-t-il vu au club ce soir-là ?',
     'interrogation.marcus.q1.opt3.resp': 'Je suis parti vers 21h00. Elias était encore en vie, je l\'ai vu dans les loges.',
     
     // Deduction Board
@@ -134,6 +134,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'conclusion.lesson2': 'Les motivations financières sont des mobiles puissants',
     'conclusion.lesson3': 'Les alibis doivent être vérifiés minutieusement',
     'conclusion.lesson4': 'Les relations personnelles peuvent cacher des secrets',
+    'conclusion.verdict_solved': 'AFFAIRE RÉSOLUE',
+    'conclusion.explanation_solved': 'Félicitations ! Vous avez identifié le coupable. Marcus Vane, l\'agent d\'Elias, a assassiné son client pour des raisons financières. La contradiction entre le bras d\'injection et le fait qu\'Elias était gaucher, combinée aux preuves financières et aux enregistrements de surveillance, démontrent clairement qu\'il s\'agit d\'un meurtre déguisé en suicide.',
+    'conclusion.explanation_incomplete': 'Votre enquête progresse, mais il manque des connexions clés pour résoudre l\'affaire. Retournez au tableau de déduction et examinez attentivement les contradictions physiques, les motivations financières et les alibis des suspects. La vérité se cache dans les détails.',
+    'conclusion.explanation_not_started': 'Vous n\'avez pas encore commencé à établir des connexions entre les indices. Utilisez le tableau de déduction pour relier les éléments suspects et découvrir la vérité sur la mort d\'Elias Thorne.',
     
     // Notebook
     'notebook.title': 'CARNET DE NOTES',
@@ -234,9 +238,15 @@ export const translations: Record<Language, Record<string, string>> = {
     'clue.c35': 'Rapport toxicologique',
     'clue.c36': 'Heure du décès',
     'clue.c37': 'Alibi de Marcus',
-    'clue.c38': 'Alibi de Sarah',
+    'clue.c38': 'Alibi de Sarah'
   },
   en: {
+    // Conclusion explanations
+    'conclusion.verdict_solved': 'CASE SOLVED',
+    'conclusion.explanation_solved': 'Congratulations! You have identified the culprit. Marcus Vane, Elias\'s agent, murdered his client for financial reasons. The contradiction between the injection arm and the fact that Elias was left-handed, combined with financial evidence and surveillance recordings, clearly demonstrate that this was a murder disguised as suicide.',
+    'conclusion.explanation_incomplete': 'Your investigation is progressing, but key connections are missing to solve the case. Return to the deduction board and carefully examine the physical contradictions, financial motivations, and suspects\' alibis. The truth lies in the details.',
+    'conclusion.explanation_not_started': 'You have not yet started establishing connections between the clues. Use the deduction board to link suspicious elements and discover the truth about Elias Thorne\'s death.',
+    
     // Navigation
     'nav.home': 'Home',
     'nav.tools': 'Tools',

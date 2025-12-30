@@ -236,10 +236,11 @@ export default function Interrogation() {
                     </CardContent>
                   </Card>
 
-                  {/* Choix des réponses */}
+                  {/* Choix des approches d'interrogatoire */}
                   {!showResponse ? (
                     <div className="space-y-4">
-                      {currentDialogue.options.map((option) => (
+                      <p className="text-[#888] text-sm mb-4 italic">Choisissez votre approche pour interroger le suspect :</p>
+                      {currentDialogue.options.map((option, index) => (
                         <motion.div
                           key={option.id}
                           whileHover={{ scale: 1.02 }}
@@ -253,9 +254,19 @@ export default function Interrogation() {
                             onClick={() => handleSelectOption(option.id)}
                           >
                             <CardContent className="pt-6">
-                              <p className="text-[#ddd] font-serif text-lg">
-                                {t(option.text)}
-                              </p>
+                              <div className="flex items-start gap-3">
+                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#fbc02d] text-black flex items-center justify-center font-bold">
+                                  {index + 1}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-[#fbc02d] text-xs font-mono uppercase mb-2">
+                                    {index === 0 ? 'Approche Directe' : index === 1 ? 'Approche Suspicieuse' : 'Approche Neutre'}
+                                  </p>
+                                  <p className="text-[#ddd] font-serif text-lg">
+                                    {t(option.text)}
+                                  </p>
+                                </div>
+                              </div>
                             </CardContent>
                           </Card>
                         </motion.div>
