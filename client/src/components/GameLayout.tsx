@@ -14,9 +14,9 @@ interface GameLayoutProps {
 
 export function GameLayout({ children }: GameLayoutProps) {
   const { currentLocationId, setCurrentLocation, locations, language } = useGameStore();
-  const t = useTranslation(language);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [_, setLocation] = useLocation();
+  const t = useTranslation(language);
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-[#f0f0f0] font-sans flex overflow-hidden">
@@ -46,7 +46,7 @@ export function GameLayout({ children }: GameLayoutProps) {
               <>
                 {/* Navigation Rapide */}
                 <div>
-                  <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">{t('deduction.clues')}</h2>
+                  <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">{t('nav.home')}</h2>
                   <div className="space-y-2">
                     {Object.values(locations).map((loc) => (
                       <Button
@@ -59,7 +59,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                         }}
                       >
                         <Map className="mr-2 h-4 w-4" />
-                        {t(loc.name)}
+                        {t(`loc.${loc.id}`)}
                       </Button>
                     ))}
                   </div>
@@ -69,7 +69,7 @@ export function GameLayout({ children }: GameLayoutProps) {
 
                 {/* Outils */}
                 <div>
-                  <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">Outils</h2>
+                  <h2 className="text-xs uppercase tracking-widest text-[#888] mb-3 font-bold">{t('nav.tools')}</h2>
                   <div className="space-y-2">
                     <Button 
                       variant="outline" 
@@ -112,7 +112,7 @@ export function GameLayout({ children }: GameLayoutProps) {
                   <TooltipTrigger asChild>
                     <Button variant="ghost" size="icon"><Map className="h-5 w-5" /></Button>
                   </TooltipTrigger>
-                  <TooltipContent side="right">{t('deduction.clues')}</TooltipContent>
+                  <TooltipContent side="right">{t('nav.home')}</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>

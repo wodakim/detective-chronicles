@@ -74,7 +74,7 @@ export default function CaseConclusion() {
               <CardContent className="space-y-6">
                 <div className="bg-[#0a0a0a] p-6 rounded-lg border border-[#333]">
                   <p className="text-[#ccc] leading-relaxed text-lg font-serif">
-                    {t(caseAnalysis.explanation, { count: caseAnalysis.totalConnections })}
+                    {t(caseAnalysis.explanation)}
                   </p>
                 </div>
 

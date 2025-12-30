@@ -63,7 +63,7 @@ export default function Interrogation() {
     }
 
     if (selectedOptionData.suspicionIncrease && selectedOptionData.suspicionIncrease > 0) {
-      toast.info(t('interrogation.suspicion_increase', { count: selectedOptionData.suspicionIncrease }));
+      toast.info(t('interrogation.suspicion_increase'));
     }
 
     setShowResponse(true);
@@ -231,7 +231,7 @@ export default function Interrogation() {
                         {selectedOptionData?.suspicionIncrease && (
                           <div className="bg-[#d32f2f]/10 border border-[#d32f2f]/50 p-3 rounded mb-4">
                             <p className="text-[#d32f2f] text-sm font-mono">
-                              {t('interrogation.suspicion_increase', { count: selectedOptionData.suspicionIncrease })}
+                              {t('interrogation.suspicion_increase')}
                             </p>
                           </div>
                         )}
