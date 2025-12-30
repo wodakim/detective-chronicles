@@ -82,7 +82,7 @@ export default function Game() {
                 <span className="text-sm font-bold tracking-widest uppercase">Lieu Actuel</span>
               </div>
               <h2 className="text-4xl font-bold font-mono text-white mb-2">{t(`loc.${currentLocation.id}`) || currentLocation.name}</h2>
-              <p className="text-[#ccc] max-w-xl text-lg">{currentLocation.description}</p>
+              <p className="text-[#ccc] max-w-xl text-lg">{t(currentLocation.description)}</p>
             </div>
           </div>
 
@@ -124,7 +124,7 @@ export default function Game() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-[#ccc] line-clamp-2">
-                        {clue.isDiscovered ? clue.description : "Cliquez pour examiner cet élément..."}
+                        {clue.isDiscovered ? t(clue.description) : "Cliquez pour examiner cet élément..."}
                       </p>
                     </CardContent>
                   </Card>
@@ -193,13 +193,13 @@ export default function Game() {
                   <div>
                     <h4 className="text-sm font-bold text-[#666] uppercase tracking-wider mb-1">Description</h4>
                     <p className="text-[#ccc] leading-relaxed">
-                      {clues[selectedClueId].description}
+                      {t(clues[selectedClueId].description)}
                     </p>
                   </div>
                   {clues[selectedClueId].content && (
                     <div className="bg-[#f0f0f0] text-black p-4 rounded-sm font-serif text-sm shadow-inner relative">
                       <div className="absolute top-0 left-0 w-full h-1 bg-[#ddd]" />
-                      "{clues[selectedClueId].content}"
+                      "{t(clues[selectedClueId].content)}"
                     </div>
                   )}
                 </div>
