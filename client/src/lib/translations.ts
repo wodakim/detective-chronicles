@@ -66,6 +66,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'interrogation.continue': 'Continuer',
     'interrogation.other_questions': 'Autres questions',
     'interrogation.change_suspect': 'Changer de suspect',
+    'interrogation.ask_question': 'Poser la question',
+    'interrogation.end_interrogation': 'Terminer l\'interrogatoire',
+    'interrogation.finished': 'Interrogatoire terminé',
+    'interrogation.new_clue': 'Nouvel indice découvert !',
+    'interrogation.new_clue_discovered': 'Nouvel indice découvert',
+    'interrogation.suspicion_increase': 'Le niveau de suspicion a augmenté',
     
     // Deduction Board
     'deduction.title': 'TABLEAU DE DÉDUCTION',
@@ -236,6 +242,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'interrogation.continue': 'Continue',
     'interrogation.other_questions': 'Other questions',
     'interrogation.change_suspect': 'Change suspect',
+    'interrogation.ask_question': 'Ask question',
+    'interrogation.end_interrogation': 'End interrogation',
+    'interrogation.finished': 'Interrogation finished',
+    'interrogation.new_clue': 'New clue discovered!',
+    'interrogation.new_clue_discovered': 'New clue discovered',
+    'interrogation.suspicion_increase': 'Suspicion level increased',
     
     // Deduction Board
     'deduction.title': 'DEDUCTION BOARD',
@@ -331,7 +343,8 @@ export const translations: Record<Language, Record<string, string>> = {
   },
   pl: {
     // Navigation
-    'nav.home': 'Strona główna',
+    'nav.home': 'Główna',
+    'nav.tools': 'Narzędzia',
     'nav.interrogations': 'Przesłuchania',
     'nav.notebook': 'Notatnik',
     'nav.deduction': 'Tablica Dedukcji',
@@ -352,6 +365,20 @@ export const translations: Record<Language, Record<string, string>> = {
     'loc.loc5': 'Biuro Dyrektora',
     'loc.loc6': 'Mieszkanie Sary Jenkins',
     'loc.loc7': 'Klinika Dr. Arisa Thorne\'a',
+    'loc.loc1.name': 'Garderoba Eliasa',
+    'loc.loc1.desc': 'Prywatna garderoba, w której znaleziono ciało Eliasa. Eleganckie pomieszczenie z fortepianem i pamiątkami z jego kariery.',
+    'loc.loc2.name': 'Biuro Marcusa Vane\'a',
+    'loc.loc2.desc': 'Profesjonalne biuro Marcusa Vane\'a, agenta artystycznego. Kontrakty i dokumenty finansowe są rozrzucone.',
+    'loc.loc3.name': 'Mieszkanie Eliasa',
+    'loc.loc3.desc': 'Prywatne mieszkanie Eliasa Thorne\'a, ujawniające intymne aspekty jego życia.',
+    'loc.loc4.name': 'Zaplecze Klubu',
+    'loc.loc4.desc': 'Zaplecze klubu jazzowego, w którym Elias regularnie występował.',
+    'loc.loc5.name': 'Biuro Dyrektora',
+    'loc.loc5.desc': 'Biuro dyrektora klubu, zawierające archiwa i nagrania z monitoringu.',
+    'loc.loc6.name': 'Mieszkanie Sary Jenkins',
+    'loc.loc6.desc': 'Mieszkanie Sary Jenkins, byłej partnerki Eliasa.',
+    'loc.loc7.name': 'Klinika Dr. Arisa Thorne\'a',
+    'loc.loc7.desc': 'Prywatna klinika Dr. Arisa Thorne\'a, brata Eliasa i lekarza.',
     
     // Characters
     'char.marcus': 'Marcus Vane',
@@ -379,6 +406,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'interrogation.continue': 'Kontynuuj',
     'interrogation.other_questions': 'Inne pytania',
     'interrogation.change_suspect': 'Zmień podejrzanego',
+    'interrogation.ask_question': 'Zadaj pytanie',
+    'interrogation.end_interrogation': 'Zakończ przesłuchanie',
+    'interrogation.finished': 'Przesłuchanie zakończone',
+    'interrogation.new_clue': 'Odkryto nową wskazówkę!',
+    'interrogation.new_clue_discovered': 'Odkryto nową wskazówkę',
+    'interrogation.suspicion_increase': 'Poziom podejrzeń wzrósł',
     
     // Deduction Board
     'deduction.title': 'TABLICA DEDUKCJI',
@@ -393,6 +426,7 @@ export const translations: Record<Language, Record<string, string>> = {
     
     // Conclusion
     'conclusion.title': 'PODSUMOWANIE ŚLEDZTWA',
+    'conclusion.status_in_progress': 'śledztwo w toku',
     'conclusion.solved': 'SPRAWA ROZWIĄZANA',
     'conclusion.culprit': 'Sprawca zidentyfikowany',
     'conclusion.incomplete': 'NIEKOMPLETNE ŚLEDZTWO',
