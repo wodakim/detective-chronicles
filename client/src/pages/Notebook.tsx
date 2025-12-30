@@ -214,7 +214,7 @@ export default function Notebook() {
               ) : (
                 <Card className="bg-[#0a0a0a] border-[#333] h-full flex items-center justify-center min-h-[400px]">
                   <CardContent className="text-center">
-                    <p className="text-[#888] font-mono">{t('notebook.select_or_create')}</p>
+                    <p className="text-[#888] font-mono">{t('notebook.select_note')}</p>
                   </CardContent>
                 </Card>
               )}

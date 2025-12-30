@@ -104,6 +104,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'deduction.reset': 'Réinitialiser',
     'deduction.conclude': 'Conclure l\'Enquête',
     'deduction.reset_message': 'Tableau réinitialisé. Recommencez votre analyse.',
+    'deduction.mode_link_active': 'Mode Liaison Actif',
+    'deduction.potential_connection': 'Connexion potentielle',
+    'deduction.relevant_connection': 'Connexion pertinente',
+    'deduction.select_second': 'Sélectionnez un second élément',
+    'deduction.selection_cancelled': 'Sélection annulée',
     
     // Conclusion
     'conclusion.title': 'CONCLUSION DE L\'ENQUÊTE',
@@ -116,6 +121,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'conclusion.correct_connections': 'Connexions correctes',
     'conclusion.restart': 'Recommencer l\'Enquête',
     'conclusion.back_to_game': 'Retour au Jeu',
+    'conclusion.back_to_board': 'Retour au Tableau',
+    'conclusion.lessons_title': 'Leçons de l\'Enquête',
+    'conclusion.lesson1': 'Les contradictions physiques sont souvent révélatrices',
+    'conclusion.lesson2': 'Les motivations financières sont des mobiles puissants',
+    'conclusion.lesson3': 'Les alibis doivent être vérifiés minutieusement',
+    'conclusion.lesson4': 'Les relations personnelles peuvent cacher des secrets',
     
     // Notebook
     'notebook.title': 'CARNET DE NOTES',
@@ -132,6 +143,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'notebook.note_created': 'Note créée',
     'notebook.note_updated': 'Note mise à jour',
     'notebook.note_deleted': 'Note supprimée',
+    'notebook.title_placeholder': 'Titre de la note',
+    'notebook.content_placeholder': 'Contenu de la note',
+    'notebook.title_empty': 'Le titre ne peut pas être vide',
+    'notebook.edit_note': 'Modifier la Note',
     
     // Settings
     'settings.title': 'PARAMÈTRES',
@@ -146,6 +161,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'settings.game_saved': 'Partie sauvegardée',
     'settings.game_loaded': 'Partie chargée',
     'settings.save_deleted': 'Sauvegarde supprimée',
+    'settings.load_error': 'Erreur lors du chargement de la sauvegarde',
 
     // Clues - Physical Evidence
     'clue.c1': 'Seringue trouvée près du corps',
@@ -301,6 +317,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'deduction.reset': 'Reset',
     'deduction.conclude': 'Conclude Investigation',
     'deduction.reset_message': 'Board reset. Start your analysis over.',
+    'deduction.mode_link_active': 'Link Mode Active',
+    'deduction.potential_connection': 'Potential connection',
+    'deduction.relevant_connection': 'Relevant connection',
+    'deduction.select_second': 'Select a second element',
+    'deduction.selection_cancelled': 'Selection cancelled',
     
     // Conclusion
     'conclusion.title': 'INVESTIGATION CONCLUSION',
@@ -312,6 +333,12 @@ export const translations: Record<Language, Record<string, string>> = {
     'conclusion.correct_connections': 'Correct connections',
     'conclusion.restart': 'Restart Investigation',
     'conclusion.back_to_game': 'Back to Game',
+    'conclusion.back_to_board': 'Back to Board',
+    'conclusion.lessons_title': 'Investigation Lessons',
+    'conclusion.lesson1': 'Physical contradictions are often revealing',
+    'conclusion.lesson2': 'Financial motivations are powerful motives',
+    'conclusion.lesson3': 'Alibis must be carefully verified',
+    'conclusion.lesson4': 'Personal relationships can hide secrets',
     
     // Notebook
     'notebook.title': 'NOTEBOOK',
@@ -328,6 +355,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'notebook.note_created': 'Note created',
     'notebook.note_updated': 'Note updated',
     'notebook.note_deleted': 'Note deleted',
+    'notebook.title_placeholder': 'Note title',
+    'notebook.content_placeholder': 'Note content',
+    'notebook.title_empty': 'Title cannot be empty',
+    'notebook.edit_note': 'Edit Note',
     
     // Settings
     'settings.title': 'SETTINGS',
@@ -342,6 +373,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'settings.game_saved': 'Game saved',
     'settings.game_loaded': 'Game loaded',
     'settings.save_deleted': 'Save deleted',
+    'settings.load_error': 'Error loading save',
 
     // Clues - Physical Evidence
     'clue.c1': 'Syringe found near body',
@@ -491,8 +523,13 @@ export const translations: Record<Language, Record<string, string>> = {
     'deduction.connections': 'POŁĄCZENIA',
     'deduction.mode_link': 'Tryb Łączenia',
     'deduction.reset': 'Resetuj',
-    'deduction.conclude': 'Zakończ Śledztwo',
+    'deduction.conclude': 'Zakończ śledztwo',
     'deduction.reset_message': 'Tablica zresetowana. Zacznij analizę od nowa.',
+    'deduction.mode_link_active': 'Tryb Łączenia Aktywny',
+    'deduction.potential_connection': 'Potencjalne połączenie',
+    'deduction.relevant_connection': 'Istotne połączenie',
+    'deduction.select_second': 'Wybierz drugi element',
+    'deduction.selection_cancelled': 'Wybór anulowany',
     
     // Conclusion
     'conclusion.title': 'PODSUMOWANIE ŚLEDZTWA',
@@ -503,8 +540,14 @@ export const translations: Record<Language, Record<string, string>> = {
     'conclusion.not_started': 'ŚLEDZTWO NIEROZPOCZĘTE',
     'conclusion.connections_made': 'Wykonane połączenia',
     'conclusion.correct_connections': 'Poprawne połączenia',
-    'conclusion.restart': 'Wznów Śledztwo',
+    'conclusion.restart': 'Wznów śledztwo',
     'conclusion.back_to_game': 'Wróć do Gry',
+    'conclusion.back_to_board': 'Wróć do Tablicy',
+    'conclusion.lessons_title': 'Lekcje ze śledztwa',
+    'conclusion.lesson1': 'Sprzeczności fizyczne są często ujawniające',
+    'conclusion.lesson2': 'Motywacje finansowe są potężnymi pobudkami',
+    'conclusion.lesson3': 'Alibi muszą być dokładnie sprawdzone',
+    'conclusion.lesson4': 'Relacje osobiste mogą ukrywać tajemnice',
     
     // Notebook
     'notebook.title': 'NOTATNIK',
@@ -521,6 +564,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'notebook.note_created': 'Notatka utworzona',
     'notebook.note_updated': 'Notatka zaktualizowana',
     'notebook.note_deleted': 'Notatka usunięta',
+    'notebook.title_placeholder': 'Tytuł notatki',
+    'notebook.content_placeholder': 'Treść notatki',
+    'notebook.title_empty': 'Tytuł nie może być pusty',
+    'notebook.edit_note': 'Edytuj Notatkę',
     
     // Settings
     'settings.title': 'USTAWIENIA',
@@ -535,6 +582,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'settings.game_saved': 'Gra zapisana',
     'settings.game_loaded': 'Gra wczytana',
     'settings.save_deleted': 'Zapis usunięty',
+    'settings.load_error': 'Błąd podczas wczytywania zapisu',
 
     // Clues - Physical Evidence
     'clue.c1': 'Strzykawka znaleziona przy ciele',
