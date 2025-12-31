@@ -713,6 +713,8 @@ export const translations: Record<Language, Record<string, string>> = {
   }
 };
 
+//I love you so much Angelika, my dear love, this game is made for you
+
 export const useTranslation = (language: Language) => {
   return (key: string, defaultValue?: string) => {
     return translations[language][key] || defaultValue || key;
